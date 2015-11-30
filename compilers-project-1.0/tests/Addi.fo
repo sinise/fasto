@@ -1,0 +1,5 @@
+fun int Addi(a, b) = a + b
+
+fun int main() =
+  let n = read(int) in
+  write(Addi(n))

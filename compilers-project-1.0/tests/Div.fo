@@ -1,0 +1,5 @@
+fun int Div(int a, int b) = a / b 
+
+fun int main() =
+  let a = read(int) in
+  write(Div(a))

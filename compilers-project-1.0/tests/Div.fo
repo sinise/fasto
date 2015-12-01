@@ -1,4 +1,4 @@
-fun int Div(int a, int b) = a / b 
+fun int Div(int a) = a / 2
 
 fun int main() =
   let a = read(int) in

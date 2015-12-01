@@ -1,0 +1,10 @@
+TypeCheker.sml
+Lexer.lex
+Parser.grm
+Interpreter.sml
+CodeGen.sml
+
+vores test:
+Addi
+Mult
+bool

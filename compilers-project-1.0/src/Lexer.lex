@@ -39,9 +39,7 @@
        | "fun"          => Parser.FUN pos
        | "true"         => Parser.BOOLVAL (true, pos) (*moded*)
        | "false"        => Parser.BOOLVAL (false, pos) (*moded*)
-       | "&&"           => Parser.AND pos (*moded*)
-       | "||"           => Parser.OR pos (*moded*)
-
+       
 (* specials: *)
        | "read"         => Parser.READ pos
        | "write"        => Parser.WRITE pos
@@ -75,11 +73,13 @@ rule Token = parse
 			     | SOME s => String.substring(s,1,
 							  String.size s - 2)),
 			     getPos lexbuf) }
-  | `*`                 { Parser.TIMES   (getPos lexbuf) }  (*moded*)
-  | `/`                 { Parser.DIVIDE   (getPos lexbuf) }  (*moded*)
+  | `*`                 { Parser.TIMES  (getPos lexbuf) }  (*moded*)
+  | `/`                 { Parser.DIVIDE (getPos lexbuf) }  (*moded*)
   | `+`                 { Parser.PLUS   (getPos lexbuf) }
   | `-`                 { Parser.MINUS  (getPos lexbuf) }
   | "=="                { Parser.DEQ    (getPos lexbuf) }
+  | "&&"                { Parser.AND    (getPos lexbuf) }  (*moded*)
+  | "||"                { Parser.OR     (getPos lexbuf) }  (*moded*)
   | `=`                 { Parser.EQ     (getPos lexbuf) }
   | `<`                 { Parser.LTH    (getPos lexbuf) }
   | `(`                 { Parser.LPAR   (getPos lexbuf) }

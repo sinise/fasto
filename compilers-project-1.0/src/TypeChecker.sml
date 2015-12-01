@@ -114,11 +114,24 @@ and checkExp ftab vtab (exp : In.Exp)
          in (Int,
              Out.Divide (e1_dec, e2_dec, pos))
          end
-    | In.And (e1, e2, pos)
-      => raise Fail "Unimplemented feature &&"
-
-    | In.Or (e1, e2, pos)
-      => raise Fail "Unimplemented feature ||"
+    | In.And (e1, e2, pos) (*moded*)
+      => let val (t1, e1') = checkExp ftab vtab e1
+             val (t2, e2') = checkExp ftab vtab e2
+         in case (t1 = t2, t1) of
+                 (false, _) => raise Error ("And cannot take "^ ppType t1 ^
+                                            "and "^ppType t2^, pos)
+               | (true, Array _) => raise Error ("And cannot oporate on arrays", pos)
+               | _ => (Bool, Out.Equal (e1', e2', pos))
+         end
+    | In.Or (e1, e2, pos) (*moded*)
+      => let val (t1, e1') = checkExp ftab vtab e1
+             val (t2, e2') = checkExp ftab vtab e2
+         in case (t1 = t2, t1) of
+                 (false, _) => raise Error ("Or cannot take "^ ppType t1 ^
+                                            "and "^ppType t2^, pos)
+               | (true, Array _) => raise Error ("Or cannot oporate on arrays", pos)
+               | _ => (Bool, Out.Equal (e1', e2', pos))
+         end
 
     | In.Not (e, pos)
       => raise Fail "Unimplemented feature not"

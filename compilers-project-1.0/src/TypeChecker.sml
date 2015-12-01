@@ -103,12 +103,17 @@ and checkExp ftab vtab (exp : In.Exp)
              Out.Minus (e1_dec, e2_dec, pos))
          end
 
-    | In.Times (e1, e2, pos)
-      => raise Fail "Unimplemented feature multiplication"
+    | In.Times (e1, e2, pos)  (*moded*)
+      => let val (_, e1_dec, e2_dec) = checkBinOp ftab vtab (pos, Int, e1, e2)
+         in (Int,
+             Out.Times (e1_dec, e2_dec, pos))
+         end
 
-    | In.Divide (e1, e2, pos)
-      => raise Fail "Unimplemented feature division"
-
+    | In.Divide (e1, e2, pos) (**)
+      => let val (_, e1_dec, e2_dec) = checkBinOp ftab vtab (pos, Int, e1, e2)
+         in (Int,
+             Out.Divide (e1_dec, e2_dec, pos))
+         end
     | In.And (e1, e2, pos)
       => raise Fail "Unimplemented feature &&"
 

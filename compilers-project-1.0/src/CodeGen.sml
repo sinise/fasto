@@ -248,7 +248,7 @@ fun compileExp e vtable place =
           val t2 = newName "times_R"
           val code1 = compileExp e1 vtable t1
           val code2 = compileExp e2 vtable t2
-      in code1 @ code2 @ [Mips.MULT (place,t1,t2)]
+      in code1 @ code2 @ [Mips.MUL (place,t1,t2)]
       end
 
   | Not (e', pos) =>

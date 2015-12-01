@@ -173,22 +173,32 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
         let val res1   = evalExp(e1, vtab, ftab)
             val res2   = evalExp(e2, vtab, ftab)
         in  case (res1, res2) of
-              (IntVal n1, IntVal n2) => IntVal (n1 && n2)
+              (BoolVal n1, BoolVal n2) => BoolVal (n1 && n2)
             | _ => invalidOperands "And on non-boolean args: " [(bool, bool)] res1 res2 pos
         end
 
   | evalExp (Or (e1, e2, pos), vtab, ftab) =
-    let val res1   = evalExp(e1, vtab, ftab)
-        val res2   = evalExp(e2, vtab, ftab)
-    in  case (res1, res2) of
-          (IntVal n1, IntVal n2) => IntVal (n1 && n2)
-        | _ => invalidOperands "And on non-boolean args: " [(bool, bool)] res1 res2 pos
-    end
+        let val res1   = evalExp(e1, vtab, ftab)
+            val res2   = evalExp(e2, vtab, ftab)
+        in  case (res1, res2) of
+              (BoolVal n1, BoolVal n2) => BoolVal (n1 || n2)
+            | _ => invalidOperands "And on non-boolean args: " [(bool, bool)] res1 res2 pos
+        end
 
   | evalExp ( Not(e, pos), vtab, ftab ) =
-    raise Fail "Unimplemented feature not"
+        let val res = evalExp(e, vtab, ftab)
+        in  case (res) of
+              (BoolVal n) => if BoolVal (n == true) then false else if (n == false) then true
+            | _ => invalidOperands "Not on non-boolean args: " [(bool)] res pos
+        end
 
   | evalExp ( Negate(e, pos), vtab, ftab ) =
+        let val res = evalExp(e, vtab, ftab)
+        in  case (res) of
+              (IntVal n) => IntVal (n * (-1))
+            | _ => invalidOperands "Negate on non-integral args: " [(int)] res pos
+        end
+
     raise Fail "Unimplemented feature negate"
 
   | evalExp ( Equal(e1, e2, pos), vtab, ftab ) =

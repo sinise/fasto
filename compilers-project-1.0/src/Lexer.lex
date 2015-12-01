@@ -73,6 +73,8 @@ rule Token = parse
 			     | SOME s => String.substring(s,1,
 							  String.size s - 2)),
 			     getPos lexbuf) }
+  | `*`                 { Parser.TIMES   (getPos lexbuf) }  (*moded*)
+  | `/`                 { Parser.DIVIDE   (getPos lexbuf) }  (*moded*)
   | `+`                 { Parser.PLUS   (getPos lexbuf) }
   | `-`                 { Parser.MINUS  (getPos lexbuf) }
   | "=="                { Parser.DEQ    (getPos lexbuf) }

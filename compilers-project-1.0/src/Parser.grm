@@ -16,6 +16,8 @@ open Fasto.UnknownTypes
 %token <(int*int)> COMMA
 %token <(int*int)> FUN READ WRITE
 
+%token <bool * (int*int)> BOOLVAL //moded
+
 %nonassoc ifprec letprec
 %left OR
 %left AND

@@ -1,5 +1,5 @@
-fun int Addi(a, b) = a + b
+fun int Addi(int a) = a + 2
 
 fun int main() =
-  let n = read(int) in
-  write(Addi(n))
+  let a = read(int) in
+  write(Addi(a))

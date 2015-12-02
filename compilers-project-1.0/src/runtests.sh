@@ -30,7 +30,7 @@ COMPILER=../bin/fasto
 # MARS is the command to run Mars.
 # can be set e.g. $>MARS=/path/to/my/Mars4_5.jar make test
 if [ -z "$MARS" ]; then
-    MARS="$HOME/bin/Mars*.jar"
+    MARS="$HOME/Mars*.jar"
 
     # In cygwin we need to use a "real" windows path for the jar file
     if [ $IS_CYGWIN ]; then

@@ -71,7 +71,6 @@ fun getElemSize Char  = One
 
 fun elemSizeToInt One = 1
   | elemSizeToInt Four = 4
-
 (* Pick the correct store instruction from the element size. *)
 fun mipsStore elem_size = case elem_size of
                               One => Mips.SB
@@ -396,6 +395,11 @@ fun compileExp e vtable place =
           [Mips.SLT (place,t1,t2)]
       end
 
+
+  | And (e1, e2, pos) = (*moded and not finalised jet*)
+        
+  | Or (e1, e2, pos) = (*moded and not finalised jet*)
+        
   | And (e1, e2, pos) =>
     raise Fail "Unimplemented feature &&"
   | Or (e1, e2, pos) =>

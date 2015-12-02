@@ -73,6 +73,7 @@ Exp :     NUM            { Constant (IntVal (#1 $1), #2 $1) }
         | Exp MINUS Exp  { Minus($1, $3, $2) }
         | Exp DIVIDE Exp { Divide ($1, $3, $2) }  //moded
         | Exp TIMES Exp  { Times ($1, $3, $2) }  //moded
+        
         | Exp AND Exp    { And   ($1, $3, $2) }  //moded
         | Exp OR Exp     { Or ($1, $3, $2) }  //moded
 

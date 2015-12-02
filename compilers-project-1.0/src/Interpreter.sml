@@ -170,13 +170,14 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
         end
 
   | evalExp (And (e1, e2, pos), vtab, ftab) =
-        let val res1   = evalExp(e1, vtab, ftab)
-            val res2   = evalExp(e2, vtab, ftab)
-        in  case (res1, res2) of
-              (BoolVal n1, BoolVal n2) => BoolVal (n1 andalso n2)
-            | _ => invalidOperands "And on non-boolean args: " [(Int, Int)] res1 res2 pos
+        let val r1 = evalExp(e1, vtab, ftab)
+            val r2 = evalExp(e2, vtab, ftab)
+        in  case (r1, r2) of
+              (BoolVal 1, BoolVal 1) => BoolVal (1)
+            | (BoolVal 0, BoolVal _) => BoolVal (0)
+            | (BoolVal _, BoolVal 0) => BoolVal (0)
+            | (_, _) => invalidOperands "Invalid equality operand types" [(Int, Int), (Bool, Bool), (Char, Char)] r1 r2 pos
         end
-
   | evalExp (Or (e1, e2, pos), vtab, ftab) =
         let val res1   = evalExp(e1, vtab, ftab)
             val res2   = evalExp(e2, vtab, ftab)

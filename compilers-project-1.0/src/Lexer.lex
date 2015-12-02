@@ -37,8 +37,8 @@
        | "bool"         => Parser.BOOL pos
        | "char"         => Parser.CHAR pos
        | "fun"          => Parser.FUN pos
-       | "true"         => Parser.BOOLVAL (true, pos) (*moded*)
-       | "false"        => Parser.BOOLVAL (false, pos) (*moded*)
+       | "true"         => Parser.TRUE pos (*moded*)
+       | "false"        => Parser.FALSE pos (*moded*)
        
 (* specials: *)
        | "read"         => Parser.READ pos

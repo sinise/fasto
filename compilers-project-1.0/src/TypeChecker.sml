@@ -119,7 +119,7 @@ and checkExp ftab vtab (exp : In.Exp)
              val (t2, e2') = checkExp ftab vtab e2
          in case (t1 = t2, t1) of
                  (false, _) => raise Error ("And cannot take "^ ppType t1 ^
-                                            "and "^ppType t2^, pos)
+                                            "and "^ppType t2, pos)
                | (true, Array _) => raise Error ("And cannot oporate on arrays", pos)
                | _ => (Bool, Out.Equal (e1', e2', pos))
          end
@@ -128,7 +128,7 @@ and checkExp ftab vtab (exp : In.Exp)
              val (t2, e2') = checkExp ftab vtab e2
          in case (t1 = t2, t1) of
                  (false, _) => raise Error ("Or cannot take "^ ppType t1 ^
-                                            "and "^ppType t2^, pos)
+                                            "and "^ppType t2, pos)
                | (true, Array _) => raise Error ("Or cannot oporate on arrays", pos)
                | _ => (Bool, Out.Equal (e1', e2', pos))
          end

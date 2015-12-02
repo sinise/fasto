@@ -173,9 +173,9 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
         let val r1 = evalExp(e1, vtab, ftab)
             val r2 = evalExp(e2, vtab, ftab)
         in  case (r1, r2) of
-              (BoolVal 1, BoolVal 1) => BoolVal (1)
-            | (BoolVal 0, BoolVal _) => BoolVal (0)
-            | (BoolVal _, BoolVal 0) => BoolVal (0)
+              (BoolVal true, BoolVal true) => BoolVal true
+            | (BoolVal false, BoolVal _) => BoolVal false
+            | (BoolVal _, BoolVal false) => BoolVal false
             | (_, _) => invalidOperands "Invalid equality operand types" [(Int, Int), (Bool, Bool), (Char, Char)] r1 r2 pos
         end
   | evalExp (Or (e1, e2, pos), vtab, ftab) =

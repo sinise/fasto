@@ -134,17 +134,17 @@ and checkExp ftab vtab (exp : In.Exp)
          end
 
     | In.Not (e, pos)
-      => let val t1 = checkExp ftab vtab e
+      => let val (t1, e') = checkExp ftab vtab e
          in  case (t1) of
-               (BoolVal) => true
-             | _ => invalidOperand "Not on non-boolean args: " Bool t1 pos
+               (Bool) => (Bool, Out.Not (e', pos))
+             | _ => raise Error ("Invalid Argument type", pos)
          end
 
     | In.Negate (e, pos)
-      => let val t1 = checkExp ftab vtab e
+      => let val (t1, e') = checkExp ftab vtab e
          in  case (t1) of
-               (IntVal) => true
-             | _ => invalidOperand "Negate on non-integral args: " Int t1 pos
+               (Int) => (Int, Out.Negate (e', pos))
+             | _ => raise Error ("Invalid Argument type", pos)
          end
 
     (* The types for e1, e2 must be the same. The result is always a Bool. *)

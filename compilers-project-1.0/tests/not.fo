@@ -1,4 +1,4 @@
-fun bool oppose(bool a) = not(a)
+fun bool oppose(bool a) = (not (a && true))
 
 fun bool main() =
   let a = read(bool) in

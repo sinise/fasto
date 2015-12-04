@@ -134,10 +134,18 @@ and checkExp ftab vtab (exp : In.Exp)
          end
 
     | In.Not (e, pos)
-      => raise Fail "Unimplemented feature not"
+      => let val t1 = checkExp ftab vtab e
+         in  case (t1) of
+               (BoolVal) => true
+             | _ => invalidOperand "Not on non-boolean args: " Bool t1 pos
+         end
 
     | In.Negate (e, pos)
-      => raise Fail "Unimplemented feature negate"
+      => let val t1 = checkExp ftab vtab e
+         in  case (t1) of
+               (IntVal) => true
+             | _ => invalidOperand "Negate on non-integral args: " Int t1 pos
+         end
 
     (* The types for e1, e2 must be the same. The result is always a Bool. *)
     | In.Equal (e1, e2, pos)

@@ -1,0 +1,5 @@
+fun bool oppose(bool a) = not(a)
+
+fun bool main() =
+  let a = read(bool) in
+  write(oppose(a))

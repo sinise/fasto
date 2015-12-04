@@ -1,5 +1,5 @@
-fun int Addi(int a) = a + 2
+fun bool orTest(bool a) = a || false
 
-fun int main() =
-  let a = read(int) in
-  write(Addi(a))
+fun bool main() =
+  let a = read(bool) in
+  write(orTest(a))

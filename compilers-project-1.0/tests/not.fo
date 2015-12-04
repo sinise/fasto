@@ -1,5 +1,5 @@
-fun bool oppose(bool a) = (not (a && true))
+fun bool notFun(bool a) = (a && true)
 
 fun bool main() =
   let a = read(bool) in
-  write(oppose(a))
+  write(notFun(a))

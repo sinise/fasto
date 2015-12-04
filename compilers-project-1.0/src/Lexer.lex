@@ -39,6 +39,7 @@
        | "fun"          => Parser.FUN pos
        | "true"         => Parser.TRUE pos (*moded*)
        | "false"        => Parser.FALSE pos (*moded*)
+       | "not"          => Parser.NOT pos (*moded*)
        
 (* specials: *)
        | "read"         => Parser.READ pos
@@ -80,7 +81,6 @@ rule Token = parse
   | "=="                { Parser.DEQ    (getPos lexbuf) }
   | "&&"                { Parser.AND    (getPos lexbuf) }  (*moded*)
   | "||"                { Parser.OR     (getPos lexbuf) }  (*moded*)
-  | "not"               { Parser.NOT    (getPos lexbuf) }  (*moded*)
   | `~`                 { Parser.NEGATE (getPos lexbuf) }  (*moded*)
   | `=`                 { Parser.EQ     (getPos lexbuf) }
   | `<`                 { Parser.LTH    (getPos lexbuf) }

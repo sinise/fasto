@@ -449,17 +449,15 @@ fun compileExp e vtable place =
           val t2 = newName "and_R"
           val code1 = compileExp e1 vtable t1
           val code2 = compileExp e2 vtable t2
+
           val trueLabel = newName "finish"
           val finish = newName "true"
       in  code1 @
-          [ Mips.LI (place,"1")
-          , Mips.BEQ (t1,"1",trueLabel)
-          , Mips.LI (place,"0")
-          , Mips.J finish
-          , Mips.LABEL trueLabel ] @
+          [ Mips.LI (place,"0")
+          , Mips.BEQ (t1, "0", finish) ] @
            code2 @
-          [Mips.BEQ (t2, "1", finish)
-          , Mips.LI (place, "0")
+          [ Mips.BEQ (t2, "0", finish)
+          , Mips.LI (place, "1")
           , Mips.LABEL finish ]
       end
   
@@ -468,15 +466,15 @@ fun compileExp e vtable place =
           val t2 = newName "or_R"
           val code1 = compileExp e1 vtable t1
           val code2 = compileExp e2 vtable t2
-          val trueLabel = newName "true"
-          val realTrueLabel = newName "true"
-      in  code1 @ 
+          val trueLabel = newName "finish"
+          val finish = newName "true"
+      in  code1 @
           [ Mips.LI (place,"1")
-          , Mips.BEQ (t1,"1",realTrueLabel) ] @
-          code2 @
-          [ Mips.BEQ (t2, "1", realTrueLabel)
+          , Mips.BNE (t1, "0", finish) ] @
+           code2 @
+          [ Mips.BNE (t2, "0", finish)
           , Mips.LI (place, "0")
-          , Mips.LABEL realTrueLabel ]
+          , Mips.LABEL finish ]
       end
 
 (* compile condition *)

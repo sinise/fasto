@@ -1,0 +1,5 @@
+fun bool and(bool a, bool b) = a && b
+
+fun bool main() =
+  let a = read(bool) in
+  write(and(a, true))

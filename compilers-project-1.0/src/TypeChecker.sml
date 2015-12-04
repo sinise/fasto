@@ -129,7 +129,7 @@ and checkExp ftab vtab (exp : In.Exp)
          in case (t1 = t2, t1) of
                  (false, _) => raise Error ("Or cannot take "^ ppType t1 ^
                                             "and "^ppType t2, pos)
-               | (true, Array _) => raise Error ("Or cannot oporate on arrays", pos)
+               | (true, Array _) => raise Error ("Or cannot operate on arrays", pos)
                | _ => (Bool, Out.Equal (e1', e2', pos))
          end
 

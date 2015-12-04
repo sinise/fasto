@@ -252,7 +252,8 @@ fun compileExp e vtable place =
   | Not (e', pos) =>
       let val t1 = newName "bool"
           val code = compileExp e' vtable t1
-      in  code @ [Mips.XORI (place, t1, "1")]
+      in  code @ 
+        [Mips.XORI (place, t1, "1")]
       end
 
   | Negate (e', pos) =>
@@ -456,9 +457,7 @@ fun compileExp e vtable place =
           val t2 = newName "and_R"
           val code1 = compileExp e1 vtable t1
           val code2 = compileExp e2 vtable t2
-
-          val trueLabel = newName "finish"
-          val finish = newName "true"
+          val finish = newName "finish"
       in  code1 @
           [ Mips.LI (place,"0")
           , Mips.BEQ (t1, "0", finish) ] @
@@ -473,8 +472,7 @@ fun compileExp e vtable place =
           val t2 = newName "or_R"
           val code1 = compileExp e1 vtable t1
           val code2 = compileExp e2 vtable t2
-          val trueLabel = newName "finish"
-          val finish = newName "true"
+          val finish = newName "finish"
       in  code1 @
           [ Mips.LI (place,"1")
           , Mips.BNE (t1, "0", finish) ] @

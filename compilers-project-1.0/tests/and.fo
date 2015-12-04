@@ -2,4 +2,8 @@ fun bool and(bool a, bool b) = a && b
 
 fun bool main() =
   let a = read(bool) in
-  write(and(a, true))
+  let b = read(bool) in
+  let c = write(and(a,a)) in
+  let d = write(and(b,b)) in
+  let e = write(and(a,b)) in
+  write(and(b,a))

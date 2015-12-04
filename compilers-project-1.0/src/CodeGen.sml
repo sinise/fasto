@@ -250,7 +250,12 @@ fun compileExp e vtable place =
       end
 
   | Not (e', pos) =>
-    raise Fail "Unimplemented feature not"
+      let val t1 = newName "bool"
+          val code = compileExp e' vtable t1
+          val setTrue = 
+      in  code @ [Mips.XORI place t1 "1"]
+      end
+
   | Negate (e', pos) =>
     raise Fail "Unimplemented feature negate"
 

@@ -15,7 +15,7 @@ open Fasto.UnknownTypes
 %token <(int*int)> LPAR RPAR LBRACKET RBRACKET LCURLY RCURLY
 %token <(int*int)> COMMA
 %token <(int*int)> FUN READ WRITE
-%token <(int*int)> TRUE FALSE AND OR //moded
+%token <(int*int)> TRUE FALSE AND OR NOT NEGATE//moded
 
 %nonassoc ifprec letprec
 %left OR
@@ -67,6 +67,7 @@ Exp :     NUM            { Constant (IntVal (#1 $1), #2 $1) }
         | CHARLIT        { Constant (CharVal (#1 $1), #2 $1) }
         | TRUE           { Constant (BoolVal true, $1)}
         | FALSE          { Constant (BoolVal false, $1)}
+
         
         | ID             { Var $1 }
         | STRINGLIT      { StringLit $1 }
@@ -79,7 +80,10 @@ Exp :     NUM            { Constant (IntVal (#1 $1), #2 $1) }
         
         | Exp AND Exp    { And ($1, $3, $2) }  //moded
         | Exp OR Exp     { Or ($1, $3, $2) }  //moded
-
+        | NOT Exp        { Not ($2, $1)}  //moded
+        | NEGATE Exp        { Negate ($2, $1)}  //moded
+        
+        
         | Exp DEQ   Exp  { Equal($1, $3, $2) }
         | Exp LTH   Exp  { Less ($1, $3, $2) }
 

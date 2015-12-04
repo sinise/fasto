@@ -256,7 +256,10 @@ fun compileExp e vtable place =
       end
 
   | Negate (e', pos) =>
-    raise Fail "Unimplemented feature negate"
+      let val t1 = newName "negate"
+          val code = compileExp e' vtable t1
+      in  code @ [Mips.SUB (place, "0", t1)]
+      end
 
   | Let (dec, e1, pos) =>
       let val (code1, vtable1) = compileDec dec vtable

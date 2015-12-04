@@ -167,9 +167,8 @@ fun compileExp e vtable place =
           [ Mips.LI (place, makeConst 1) ] 
       else
           [ Mips.LI (place, makeConst 0) ]
+ 
 
-  (*raise Fail "Unimplemented feature boolean constants"*)
-  
   (* Create/return a label here, collect all string literals of the program
      (in stringTable), and create them in the data section before the heap
      (Mips.ASCIIZ) *)
@@ -374,6 +373,7 @@ fun compileExp e vtable place =
       end
 
   (* Comparison checking, later similar code for And and Or. *)
+  
   | Equal (e1, e2, pos) =>
       let val t1 = newName "eq_L"
           val t2 = newName "eq_R"
@@ -396,14 +396,6 @@ fun compileExp e vtable place =
       end
 
 
-  | And (e1, e2, pos) = (*moded and not finalised jet*)
-        
-  | Or (e1, e2, pos) = (*moded and not finalised jet*)
-        
-  | And (e1, e2, pos) =>
-    raise Fail "Unimplemented feature &&"
-  | Or (e1, e2, pos) =>
-    raise Fail "Unimplemented feature ||"
 
   (* Indexing:
      1. generate code to compute the index
@@ -451,6 +443,32 @@ fun compileExp e vtable place =
   (* reduce(f, acc, {x1, x2, ...}) = f(..., f(x2, f(x1, acc))) *)
   | Reduce (binop, acc_exp, arr_exp, tp, pos) =>
     raise Fail "Unimplemented feature reduce"
+
+    | And (e1, e2, pos) =>                                             (*moded*)
+      let val t1 = newName "and_L"
+          val t2 = newName "and_R"
+          val code1 = compileExp e1 vtable t1
+          val code2 = compileExp e2 vtable t2
+          val falseLabel = newName "false"
+      in  code1 @ code2 @
+          [ Mips.LI (place,"0")
+          , Mips.BNE (t1,t2,falseLabel)
+          , Mips.LI (place,"1")
+          , Mips.LABEL falseLabel ]
+      end
+  
+    | Or (e1, e2, pos) =>                                              (*moded*)
+      let val t1 = newName "or_L"
+          val t2 = newName "or_R"
+          val code1 = compileExp e1 vtable t1
+          val code2 = compileExp e2 vtable t2
+          val trueLabel = newName "true"
+      in  code1 @ code2 @
+          [ Mips.LI (place,"0")
+          , Mips.BNE (t1,t2,falseLabel)
+          , Mips.LI (place,"1")
+          , Mips.LABELtrueLabel ]
+      end
 
 (* compile condition *)
 and compileCond c vtable tlab flab =

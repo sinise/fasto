@@ -102,18 +102,18 @@ and checkExp ftab vtab (exp : In.Exp)
              Out.Minus (e1_dec, e2_dec, pos))
          end
 
-    | In.Times (e1, e2, pos)  (*moded*)
+    | In.Times (e1, e2, pos)                                           (*moded*)
       => let val (_, e1_dec, e2_dec) = checkBinOp ftab vtab (pos, Int, e1, e2)
          in (Int,
              Out.Times (e1_dec, e2_dec, pos))
          end
 
-    | In.Divide (e1, e2, pos) (*moded*)
+    | In.Divide (e1, e2, pos)                                         (*moded*)
       => let val (_, e1_dec, e2_dec) = checkBinOp ftab vtab (pos, Int, e1, e2)
          in (Int,
              Out.Divide (e1_dec, e2_dec, pos))
          end
-    | In.And (e1, e2, pos) (*moded*)
+    | In.And (e1, e2, pos)                                            (*moded*)
       => let val (t1, e1') = checkExp ftab vtab e1
              val (t2, e2') = checkExp ftab vtab e2
          in case (t1 = t2, t1) of
@@ -122,7 +122,7 @@ and checkExp ftab vtab (exp : In.Exp)
                | (true, Array _) => raise Error ("And cannot oporate on arrays", pos)
                | _ => (Bool, Out.And (e1', e2', pos))
          end
-    | In.Or (e1, e2, pos) (*moded*)
+    | In.Or (e1, e2, pos)                                             (*moded*)
       => let val (t1, e1') = checkExp ftab vtab e1
              val (t2, e2') = checkExp ftab vtab e2
          in case (t1 = t2, t1) of

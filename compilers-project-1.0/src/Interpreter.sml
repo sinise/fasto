@@ -178,8 +178,8 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
         end
 
   | evalExp (Or (e1, e2, pos), vtab, ftab) =
-        let val res1   = evalExp(e1, vtab, ftab)
-            val res2   = evalExp(e2, vtab, ftab)
+        let val res1 = evalExp(e1, vtab, ftab)
+            val res2 = evalExp(e2, vtab, ftab)
         in  case (res1, res2) of
               (BoolVal n1, BoolVal n2) => BoolVal (n1 orelse n2)
             | _ => invalidOperands "AND on non-boolean args: " [(Int, Int)] res1 res2 pos

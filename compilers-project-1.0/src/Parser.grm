@@ -23,9 +23,9 @@ open Fasto.UnknownTypes
 %left AND
 %left DEQ LTH
 %left PLUS MINUS
-%left DIVIDE //moded
-%left TIMES  //moded
-%nonassoc NEGATE //moded
+%left DIVIDE                                                            //moded
+%left TIMES                                                             //moded
+%nonassoc NEGATE                                                        //moded
 
 %start Prog
 %type <Fasto.UnknownTypes.Prog> Prog

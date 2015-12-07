@@ -165,8 +165,8 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
         let val res1   = evalExp(e1, vtab, ftab)
             val res2   = evalExp(e2, vtab, ftab)
         in  case (res1, res2) of
-              (IntVal n1, IntVal n2) => IntVal (n1 div n2)
-            | _ => invalidOperands "Divide on non-integral args: " [(Int, Int)] res1 res2 pos
+              (IntVal n1, IntVal n2) => IntVal (Int.quot (n1,n2))
+            | _ => invalidOperands "Divide on non-int args: " [(Int, Int)] res1 res2 pos
         end
 
   | evalExp (And (e1, e2, pos), vtab, ftab) =
@@ -197,7 +197,7 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
         let val res = evalExp(e, vtab, ftab)
         in  case (res) of
               (IntVal n) => IntVal (n * (~1))
-            | _ => invalidOperand "Negate on non-integral args: " Int res pos
+            | _ => invalidOperand "Negate on non-int args: " Int res pos
         end
 
   | evalExp ( Equal(e1, e2, pos), vtab, ftab ) =

@@ -158,46 +158,45 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
             val res2   = evalExp(e2, vtab, ftab)
         in  case (res1, res2) of
               (IntVal n1, IntVal n2) => IntVal (n1*n2)
-            | _ => invalidOperands "Times on non-integral args: " [(Int, Int)] res1 res2 pos
+            | _ => invalidOperands "Multiplication on non-integral args: " [(Int, Int)] res1 res2 pos
         end
 
   | evalExp ( Divide(e1, e2, pos), vtab, ftab ) =
         let val res1   = evalExp(e1, vtab, ftab)
             val res2   = evalExp(e2, vtab, ftab)
         in  case (res1, res2) of
-              (IntVal n1, IntVal n2) => IntVal (Int.quot (n1,n2))
-            | _ => invalidOperands "Divide on non-int args: " [(Int, Int)] res1 res2 pos
+              (IntVal n1, IntVal n2) => IntVal (n1 div n2)
+            | _ => invalidOperands "Division on non-integral args: " [(Int, Int)] res1 res2 pos
         end
 
   | evalExp (And (e1, e2, pos), vtab, ftab) =
-        let val r1 = evalExp(e1, vtab, ftab)
-            val r2 = evalExp(e2, vtab, ftab)
-        in  case (r1, r2) of
-              (BoolVal true, BoolVal true) => BoolVal true
-            | (BoolVal false, BoolVal _) => BoolVal false
-            | (BoolVal _, BoolVal false) => BoolVal false
-            | (_, _) => invalidOperands "Invalid equality operand types" [(Int, Int), (Bool, Bool), (Char, Char)] r1 r2 pos
+        let val res1 = evalExp(e1, vtab, ftab)
+            val res2 = evalExp(e2, vtab, ftab)
+        in  case (res1, res2) of
+              (BoolVal n1, BoolVal n2) => BoolVal (n1 andalso n2)
+            | _ => invalidOperands "OR on non-boolean args: " [(Int, Int)] res1 res2 pos
         end
+
   | evalExp (Or (e1, e2, pos), vtab, ftab) =
         let val res1   = evalExp(e1, vtab, ftab)
             val res2   = evalExp(e2, vtab, ftab)
         in  case (res1, res2) of
               (BoolVal n1, BoolVal n2) => BoolVal (n1 orelse n2)
-            | _ => invalidOperands "And on non-boolean args: " [(Int, Int)] res1 res2 pos
+            | _ => invalidOperands "AND on non-boolean args: " [(Int, Int)] res1 res2 pos
         end
 
   | evalExp ( Not(e, pos), vtab, ftab ) =
         let val res = evalExp(e, vtab, ftab)
         in  case (res) of
               (BoolVal n) => BoolVal (if n then false else true)
-            | _ => invalidOperand "Not on non-boolean args: " Bool res pos
+            | _ => invalidOperand "NOT on non-boolean args: " Bool res pos
         end
 
   | evalExp ( Negate(e, pos), vtab, ftab ) =
         let val res = evalExp(e, vtab, ftab)
         in  case (res) of
               (IntVal n) => IntVal (n * (~1))
-            | _ => invalidOperand "Negate on non-int args: " Int res pos
+            | _ => invalidOperand "Negate on non-integral args: " Int res pos
         end
 
   | evalExp ( Equal(e1, e2, pos), vtab, ftab ) =
@@ -307,7 +306,7 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
             val () =
             case v of
               IntVal n => print( (Int.toString n) ^ " " )
-            | BoolVal b => let val res = if(b) then "True " else "False " in print( res ) end
+            | BoolVal b => let val res = if(b) then "true" else "false" in print( res ) end
             | CharVal c => print( (Char.toCString c)^" " )
             | ArrayVal (a, Char) =>
               let fun mapfun e =

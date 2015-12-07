@@ -26,6 +26,7 @@ open Fasto.UnknownTypes
 %left DIVIDE //moded
 %left TIMES  //moded
 %nonassoc NEGATE //moded
+
 %start Prog
 %type <Fasto.UnknownTypes.Prog> Prog
 %type <Fasto.UnknownTypes.FunDec list> FunDecs

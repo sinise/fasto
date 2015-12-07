@@ -132,14 +132,14 @@ and checkExp ftab vtab (exp : In.Exp)
                | _ => (Bool, Out.Or (e1', e2', pos))
          end
 
-    | In.Not (e, pos)
+    | In.Not (e, pos)                                                  (*Moded*)
       => let val (t1, e') = checkExp ftab vtab e
          in  case (t1) of
                (Bool) => (Bool, Out.Not (e', pos))
              | _ => raise Error ("Invalid Argument type", pos)
          end
 
-    | In.Negate (e, pos)
+    | In.Negate (e, pos)                                               (*Moded*)
       => let val (t1, e') = checkExp ftab vtab e
          in  case (t1) of
                (Int) => (Int, Out.Negate (e', pos))
@@ -224,8 +224,13 @@ and checkExp ftab vtab (exp : In.Exp)
          in (arr_type, Out.Index (s, i_exp_dec, arr_type, pos))
          end
 
-    | In.Iota (n_exp, pos)
-      => raise Fail "Unimplemented feature iota"
+    | In.Iota (n_exp, pos)                                            (*Moded*)
+      => let val (e_type, n_exp_dec) = checkExp ftab vtab n_exp
+         in if e_type = Int
+            then (Array Int, Out.Iota (n_exp_dec, pos))
+            else raise Error ("Iota: wrong argument type " ^
+                              ppType e_type, pos)
+         end
                
     | In.Map (f, arr_exp, _, _, pos)
       => raise Fail "Unimplemented feature map"

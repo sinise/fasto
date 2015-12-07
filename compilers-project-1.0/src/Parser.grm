@@ -21,6 +21,7 @@ open Fasto.UnknownTypes
 %nonassoc ifprec letprec
 %left OR
 %left AND
+%nonassoc NOT //moded
 %left DEQ LTH
 %left PLUS MINUS
 %left DIVIDE                                                            //moded

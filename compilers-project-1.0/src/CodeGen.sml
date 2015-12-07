@@ -383,8 +383,8 @@ fun compileExp e vtable place =
   (* Comparison checking, later similar code for And and Or. *)
   
   | Equal (e1, e2, pos) =>
-      let val t1 = newName "eq_L"
-          val t2 = newName "eq_R"
+      let val t1 = newName "eq_Lllllllllll"
+          val t2 = newName "eq_Rrrrrrrrrrrr"
           val code1 = compileExp e1 vtable t1
           val code2 = compileExp e2 vtable t2
           val falseLabel = newName "false"

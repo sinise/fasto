@@ -1,7 +1,6 @@
 (* A type-checker for Fasto. *)
 
 structure TypeChecker = struct
-
 (*
 
 A type-checker checks that all operations in a (Fasto) program are performed on
@@ -121,7 +120,7 @@ and checkExp ftab vtab (exp : In.Exp)
                  (false, _) => raise Error ("And cannot take "^ ppType t1 ^
                                             "and "^ppType t2, pos)
                | (true, Array _) => raise Error ("And cannot oporate on arrays", pos)
-               | _ => (Bool, Out.Equal (e1', e2', pos))
+               | _ => (Bool, Out.And (e1', e2', pos))
          end
     | In.Or (e1, e2, pos) (*moded*)
       => let val (t1, e1') = checkExp ftab vtab e1
@@ -130,7 +129,7 @@ and checkExp ftab vtab (exp : In.Exp)
                  (false, _) => raise Error ("Or cannot take "^ ppType t1 ^
                                             "and "^ppType t2, pos)
                | (true, Array _) => raise Error ("Or cannot operate on arrays", pos)
-               | _ => (Bool, Out.Equal (e1', e2', pos))
+               | _ => (Bool, Out.Or (e1', e2', pos))
          end
 
     | In.Not (e, pos)

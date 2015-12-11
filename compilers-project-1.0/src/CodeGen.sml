@@ -156,9 +156,11 @@ applyFunArg(FunName S, args, vtable, place, pos): Mips.prog =
     end
 
 applyFunArg(Lambda (_, params, body, epos), args, vtable, place, pos) =
-    let fun bindParams (...) = ...
+    let fun bindParams (Param (pname,_)::params') (arg::args') vtable' = 
+            bindParams params' args' (SymTab.bind pname arg vtable')
+          | bindParams _ _ vtable' = vtable'
         val vtable' = bindParams params args vtable
-        val tmp = newName "tempreg"
+        val tmp = newName "fun arg_regs"
     in
         compileExp body vtable' tmp @ [Mips.MOVE(place, tmp)] 
     end

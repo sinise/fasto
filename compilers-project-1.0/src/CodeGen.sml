@@ -149,6 +149,20 @@ fun applyRegs( fid: string,
       else move_code @ [ Mips.JAL(fid,caller_regs), Mips.MOVE(place, "2") ]
   end
 
+applyFunArg(FunName S, args, vtable, place, pos): Mips.prog =
+    let val tmp = newName "tmpreg"
+    in 
+        applyReg (s, args, tmp, pos) @ [Mips.move(place, tmp)] 
+    end
+
+applyFunArg(Lambda (_, params, body, epos), args, vtable, place, pos) =
+    let fun bindParams (...) = ...
+        val vtable' = bindParams params args vtable
+        val tmp = newName "tempreg"
+    in
+        compileExp body vtable' tmp @ [Mips.MOVE(place, tmp)] 
+    end
+
 (* Compile 'e' under bindings 'vtable', putting the result in its 'place'. *)
 fun compileExp e vtable place =
   case e of
@@ -492,8 +506,14 @@ fun compileExp e vtable place =
          @ loop_footer
       end
 
-  | Map (farg, arr_exp, elem_type, ret_type, pos) =>
-    raise Fail "Unimplemented feature map"
+  | Map (farg, arg exp, elem_type, ret_type, pos) => 
+       val loop_map0 = case getElemSize elemType of
+                           one => Mips.LB (res_reg, elem_reg, "0") ::
+                           applyfunArg (farg, [res_reg], vtable, res_reg, pos) @ 
+                           [Mips.Addi(elem_reg, elem_reg, "1")]
+                         | four => Mips.LW (res_reg, elem_reg, "0") ::
+                           applyfunArg (farg, [res_reg], vtable, res_reg, pos) @ 
+                           [Mips.Addi(elem_reg, elem_reg, "4")]
 
   (* reduce(f, acc, {x1, x2, ...}) = f(..., f(x2, f(x1, acc))) *)
   | Reduce (binop, acc_exp, arr_exp, tp, pos) =>

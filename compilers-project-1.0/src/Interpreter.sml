@@ -270,8 +270,12 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
              | _ => raise Error("Iota argument is not a number: "^ppVal 0 sz, pos)
         end
 
-  | evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) =
-    raise Fail "Unimplemented feature map"
+  | evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) = 
+        let
+          val s = value
+        in
+          map (evalFunArg farg) (evalExp [])
+        end
 
   | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =
     raise Fail "Unimplemented feature reduce"

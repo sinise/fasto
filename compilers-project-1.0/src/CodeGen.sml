@@ -149,7 +149,7 @@ fun applyRegs( fid: string,
       else move_code @ [ Mips.JAL(fid,caller_regs), Mips.MOVE(place, "2") ]
   end
 
-fun applyFunArg(FunName S, args, vtable, place, pos): Mips.prog =
+fun applyFunArg(FunName S, args, vtable, place, pos): Mips.Prog =
         let val tmp = newName "tmpreg"
         in 
             applyReg (s, args, tmp, pos) @ [Mips.move(place, tmp)] 
@@ -508,12 +508,19 @@ fun compileExp e vtable place =
          @ loop_footer
       end
 
-  | Map (farg, arg exp, elem_type, ret_type, pos) => 
+  | Map (farg, arg_exp, elem_type, ret_type, pos) => 
+        let
+          val name = value
+        in
+          body
+        end
+    
+
        val loop_map0 = case getElemSize elemType of
-                           one => Mips.LB (res_reg, elem_reg, "0") ::
+                           One => Mips.LB (res_reg, elem_reg, "0") ::
                            applyfunArg (farg, [res_reg], vtable, res_reg, pos) @ 
                            [Mips.Addi(elem_reg, elem_reg, "1")]
-                         | four => Mips.LW (res_reg, elem_reg, "0") ::
+                         | Four => Mips.LW (res_reg, elem_reg, "0") ::
                            applyfunArg (farg, [res_reg], vtable, res_reg, pos) @ 
                            [Mips.Addi(elem_reg, elem_reg, "4")]
 

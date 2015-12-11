@@ -16,12 +16,12 @@ open Fasto.UnknownTypes
 %token <(int*int)> COMMA
 %token <(int*int)> FUN READ WRITE
 %token <(int*int)> TRUE FALSE AND OR NOT NEGATE                         //moded
-%token <(int*int)> IOTA                                                 //moded
+%token <(int*int)> IOTA MAP                                             //moded
 
 %nonassoc ifprec letprec
 %left OR
 %left AND
-%nonassoc NOT //moded
+%nonassoc NOT                                                           //moded
 %left DEQ LTH
 %left PLUS MINUS
 %left DIVIDE                                                            //moded
@@ -92,6 +92,8 @@ Exp :     NUM            { Constant (IntVal (#1 $1), #2 $1) }
 
         | IOTA LPAR Exp RPAR
                         { Iota ($3, $1) }
+        | MAP LPAR Exp RPAR
+                        { Map ($3, $1) }
 
         | IF Exp THEN Exp ELSE Exp %prec ifprec
                         { If ($2, $4, $6, $1) }

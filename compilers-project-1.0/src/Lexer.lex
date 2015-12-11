@@ -41,6 +41,7 @@
        | "false"        => Parser.FALSE pos                           (*moded*)
        | "not"          => Parser.NOT pos                             (*moded*)
        | "iota"         => Parser.IOTA pos                            (*moded*)
+       | "map"          => Parser.MAP pos                             (*moded*)
        
 (* specials: *)
        | "read"         => Parser.READ pos

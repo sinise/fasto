@@ -510,7 +510,8 @@ fun compileExp e vtable place =
 
   | Map (farg, arg_exp, elem_type, ret_type, pos) => 
         let
-          val name = value
+          val res_reg = newName()
+          val elem_reg = 
         in
           body
         end

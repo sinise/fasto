@@ -273,10 +273,10 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
   | evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) = 
         let val ls = evalExp(arrexp, vtab,ftab)
         in
-          ( map (farg) ls )
+            map (fn x => let val (result, tp) = evalFunArg(farg, vtab,ftab, pos, x) 
+                            in result end ) 
+           ls
         end
-
-
 
 
   | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =

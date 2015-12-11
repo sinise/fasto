@@ -242,11 +242,11 @@ and checkExp ftab vtab (exp : In.Exp)
                               [tp] => tp
                             |  _ => Error ("Map Wrong argument fn type ")
          in if arr_eltp = f_argtp
-            then (Array f_returntp, Out.Map (fnew, f_argument,  ))
+            then (Array f_returntp, Out.Map (fnew, arr_exp_tp, f_argument, f_returntp, pos))
             else raise Error ("Map: wrong argument type " ^
                               ppType e_type, pos)
          end
-               
+
     | In.Reduce (f, n_exp, arr_exp, _, pos)
       => raise Fail "Unimplemented feature reduce"
 

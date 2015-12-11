@@ -149,21 +149,21 @@ fun applyRegs( fid: string,
       else move_code @ [ Mips.JAL(fid,caller_regs), Mips.MOVE(place, "2") ]
   end
 
-applyFunArg(FunName S, args, vtable, place, pos): Mips.prog =
-    let val tmp = newName "tmpreg"
-    in 
-        applyReg (s, args, tmp, pos) @ [Mips.move(place, tmp)] 
-    end
+fun applyFunArg(FunName S, args, vtable, place, pos): Mips.prog =
+        let val tmp = newName "tmpreg"
+        in 
+            applyReg (s, args, tmp, pos) @ [Mips.move(place, tmp)] 
+        end
 
-applyFunArg(Lambda (_, params, body, epos), args, vtable, place, pos) =
-    let fun bindParams (Param (pname,_)::params') (arg::args') vtable' = 
-            bindParams params' args' (SymTab.bind pname arg vtable')
-          | bindParams _ _ vtable' = vtable'
-        val vtable' = bindParams params args vtable
-        val tmp = newName "fun arg_regs"
-    in
-        compileExp body vtable' tmp @ [Mips.MOVE(place, tmp)] 
-    end
+  | applyFunArg(Lambda (_, params, body, epos), args, vtable, place, pos) =
+        let fun bindParams (Param (pname,_)::params') (arg::args') vtable' = 
+                bindParams params' args' (SymTab.bind pname arg vtable')
+              | bindParams _ _ vtable' = vtable'
+            val vtable' = bindParams params args vtable
+            val tmp = newName "fun arg_regs"
+        in
+            compileExp body vtable' tmp @ [Mips.MOVE(place, tmp)] 
+        end
 
 (* Compile 'e' under bindings 'vtable', putting the result in its 'place'. *)
 fun compileExp e vtable place =

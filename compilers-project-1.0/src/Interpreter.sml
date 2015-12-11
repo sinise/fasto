@@ -86,7 +86,7 @@ fun applyIndexing( ArrayVal(lst, tp), IntVal ind, pos ) =
   | applyIndexing( arr, IntVal ind, pos ) =
     raise Error("Indexing Error: " ^ (ppVal 0 arr) ^ " is not an array", pos)
   | applyIndexing( arr, e, pos ) = (* Order of clauses is important here. *)
-    invalidOperand "Indexing error, non-integer index" Int e pos
+    invalidOperand "Indexing error, non-integral index" Int e pos
 
 (* Bind the formal parameters of a function declaration to actual parameters in
    a new vtab. *)
@@ -142,7 +142,7 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
             val res2   = evalExp(e2, vtab, ftab)
         in  case (res1, res2) of
               (IntVal n1, IntVal n2) => IntVal (n1+n2)
-            | _ => invalidOperands "Plus on non-integer args: " [(Int, Int)] res1 res2 pos
+            | _ => invalidOperands "Plus on non-integral args: " [(Int, Int)] res1 res2 pos
         end
 
   | evalExp ( Minus(e1, e2, pos), vtab, ftab ) =
@@ -150,7 +150,7 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
             val res2   = evalExp(e2, vtab, ftab)
         in  case (res1, res2) of
               (IntVal n1, IntVal n2) => IntVal (n1-n2)
-            | _ => invalidOperands "Minus on non-integer args: " [(Int, Int)] res1 res2 pos
+            | _ => invalidOperands "Minus on non-integral args: " [(Int, Int)] res1 res2 pos
         end
 
   | evalExp ( Times(e1, e2, pos), vtab, ftab ) =
@@ -158,7 +158,7 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
             val res2   = evalExp(e2, vtab, ftab)
         in  case (res1, res2) of
               (IntVal n1, IntVal n2) => IntVal (n1*n2)
-            | _ => invalidOperands "Multiplication on non-integer args: " [(Int, Int)] res1 res2 pos
+            | _ => invalidOperands "Multiplication on non-integral args: " [(Int, Int)] res1 res2 pos
         end
 
   | evalExp ( Divide(e1, e2, pos), vtab, ftab ) =
@@ -166,7 +166,7 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
             val res2   = evalExp(e2, vtab, ftab)
         in  case (res1, res2) of
               (IntVal n1, IntVal n2) => IntVal (n1 div n2)
-            | _ => invalidOperands "Division on non-integer args: " [(Int, Int)] res1 res2 pos
+            | _ => invalidOperands "Division on non-integral args: " [(Int, Int)] res1 res2 pos
         end
 
   | evalExp (And (e1, e2, pos), vtab, ftab) =
@@ -196,7 +196,7 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
         let val res = evalExp(e, vtab, ftab)
         in  case (res) of
               (IntVal n) => IntVal (n * (~1))
-            | _ => invalidOperand "Negate on non-integer args: " Int res pos
+            | _ => invalidOperand "Negate on non-integral args: " Int res pos
         end
 
   | evalExp ( Equal(e1, e2, pos), vtab, ftab ) =
@@ -254,7 +254,7 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
                                      Int.toString(len)^", index: "^Int.toString(ind), pos )
                 end
            | (SOME m, IntVal _) => raise Error("Indexing error: " ^ (ppVal 0 m) ^ " is not an array", pos)
-           | (_, _) => invalidOperand "Indexing error, non-integer index" Int indv pos
+           | (_, _) => invalidOperand "Indexing error, non-integral index" Int indv pos
 
         end
 
@@ -270,17 +270,12 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
              | _ => raise Error("Iota argument is not a number: "^ppVal 0 sz, pos)
         end
 
-<<<<<<< HEAD
-  | evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) =
-        let
-          val s = farg
-=======
   | evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) = 
         let val ls = evalExp(arrexp, vtab,ftab)
->>>>>>> origin/master
         in
           ( map (farg) ls )
         end
+
 
 
 

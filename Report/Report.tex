@@ -1,5 +1,16 @@
 \documentclass[]{article}
 \usepackage{parskip} %Removes paragraph line indents
+\usepackage{tabu}
+\usepackage{booktabs,array}
+
+
+\makeatletter
+\newcolumntype{V}[1]{>{\topsep=0pt\@minipagetrue}p{#1}<{\vspace{-\baselineskip}}}
+\makeatother
+\newcommand{\command}[1]{\texttt{\string#1}}
+
+
+\setlength{\parindent}{0pt} % just for the example
 
 %opening
 \title{Group Assignment\\ \ \\Compilers\\ \ \\}
@@ -38,12 +49,504 @@ detail. You might be penalized if your report includes too many irrelevant detai
 \section{Introduction}
 	We're given the grand task of 
 \section{Implementation}
+	Each implementation step is presented in the order, which the the code is passed through: Lexer -> Parser -> Interpreter -> Type Checker -> MIPS Code Generator
+	
 	\subsection*{Notes}
 		\begin{itemize}
 			\item Implemented Boolean Litterals: true and false.
 			\subitem Added test files bool.fo, bool.in, bool.out
 		\end{itemize}
 	
+\subsection{True/False}
+
+	In the first task, we're given the sub-task to implement the boolean operators True and False. We start out by creating the following test files:\\
+	
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{bool.fo} &
+		\begin{verbatim}
+			fun int boolTest(int a) = if a == 1
+			then 1 else 0
+			
+			fun int main() =
+			    let a = read(int) in
+			    write(boolTest(a))
+			  
+		\end{verbatim}
+		\\
+		\command{bool.in} &
+		\begin{verbatim}
+			1
+			
+		\end{verbatim}
+		\\
+		\command{bool.out} &
+		\begin{verbatim}
+			1
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+
+Then we implement the True/False token in our parser as well as add True and False to the expression list\\
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{Parser.grm} &
+		\begin{verbatim}
+			%token <(int*int)> TRUE FALSE
+			
+		\end{verbatim}
+		\\
+		\command{Parser.grm} &
+		\begin{verbatim}
+			| TRUE           { Constant (BoolVal true, $1)}
+			| FALSE          { Constant (BoolVal false, $1)}
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+And finally we add the boolean constants to our MIPS code generator\\
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{CodeGen.sml} &
+		\begin{verbatim}
+			| Constant (BoolVal b, pos) => 
+			    if b then
+			        [ Mips.LI (place, makeConst 1) ] 
+			    else
+			        [ Mips.LI (place, makeConst 0) ]
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+\subsection{Multiplication and Division}
+Moving on to the implementation of multiplication and division, we again start out with creating test files.\\
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{Mult.fo} &
+		\begin{verbatim}
+			fun int Mult(int a) = a * 2
+			
+			fun int main() =
+			    let a = read(int) in
+			    write(Mult(a))
+		
+		\end{verbatim}
+		\\
+		\command{Mult.in} &
+		\begin{verbatim}
+			4
+		
+		\end{verbatim}
+		\\
+		\command{Mult.out} &
+		\begin{verbatim}
+			8
+			
+		\end{verbatim}
+		\\
+		\command{Div.fo} &
+		\begin{verbatim}
+			fun int Div(int a) = a / 2
+			
+			fun int main() =
+			    let a = read(int) in
+			    write(Div(a))
+			
+		\end{verbatim}
+		\\
+		\command{Div.in} &
+		\begin{verbatim}
+			128
+		
+		\end{verbatim}
+		\\
+		\command{Div.out} &
+		\begin{verbatim}
+			64
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+After creating the test files, we swiftly move on to the lexer
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{Lexer.lex} &
+		\begin{verbatim}
+			| `*`  { Parser.TIMES  (getPos lexbuf) }
+			| `/`  { Parser.DIVIDE (getPos lexbuf) }
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+In the parser, we add TIMES and DIVIDE to the already created "PLUS MINUS DEQ EQ LTH" token. They're given a proper precedence order as well as added to the expression list.
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{Parser.grm} &
+		\begin{verbatim}
+			%token <(int*int)> PLUS MINUS DEQ EQ LTH DIVIDE TIMES
+		
+		\end{verbatim}
+		\\
+		\command{Parser.grm} &
+		\begin{verbatim}
+			%left DIVIDE
+			%left TIMES
+		
+		\end{verbatim}
+		\\
+		\command{Parser.grm} &
+		\begin{verbatim}
+			Exp :
+			        | Exp DIVIDE Exp { Divide ($1, $3, $2) }
+			        | Exp TIMES Exp  { Times ($1, $3, $2) }
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+Moving on to the type checker, we make sure that we can properly check the used types, when doing multiplication and division
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{TypeChecker.sml} &
+		\begin{verbatim}
+		and checkExp ftab vtab (exp : In.Exp)
+		  = case exp of
+		    .
+		    .
+		    .
+		    | In.Times (e1, e2, pos)
+		      => let val (_, e1_dec, e2_dec) = checkBinOp ftab vtab (pos, Int, e1, e2)
+		         in (Int,
+		             Out.Times (e1_dec, e2_dec, pos))
+		         end
+		 
+		    | In.Divide (e1, e2, pos)
+		      => let val (_, e1_dec, e2_dec) = checkBinOp ftab vtab (pos, Int, e1, e2)
+		         in (Int,
+		             Out.Divide (e1_dec, e2_dec, pos))
+		         end		
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+We go ahead and implement them in our interpreter
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{Interpreter.sml} &
+		\begin{verbatim}
+			| evalExp ( Times(e1, e2, pos), vtab, ftab ) =
+			      let val res1   = evalExp(e1, vtab, ftab)
+			          val res2   = evalExp(e2, vtab, ftab)
+			      in  case (res1, res2) of
+			              (IntVal n1, IntVal n2) => IntVal (n1*n2)
+			            | _ => invalidOperands  "Multiplication on non-integral args: " [(Int, Int)] res1 res2 pos
+			      end
+			  
+			| evalExp ( Divide(e1, e2, pos), vtab, ftab ) =
+			      let val res1   = evalExp(e1, vtab, ftab)
+			          val res2   = evalExp(e2, vtab, ftab)
+			      in  case (res1, res2) of
+			              (IntVal n1, IntVal n2) => IntVal (n1 div n2)
+			            | _ => invalidOperands "Division on non-integral args: " [(Int, Int)] res1 res2 pos
+			      end
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+Finally they're added to the MIPS code generator
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{CodeGen.sml} &
+		\begin{verbatim}
+			fun compileExp e vtable place =
+			    case e of
+			    .
+			    .
+			    .
+			    | Divide (e1, e2, pos) =>
+			        let val t1 = newName "divide_L"
+			            val t2 = newName "divide_R"
+			            val code1 = compileExp e1 vtable t1
+			            val code2 = compileExp e2 vtable t2
+			        in code1 @ code2 @ [Mips.DIV (place,t1,t2)]
+			        end
+			    | Times (e1, e2, pos) =>
+			        let val t1 = newName "times_L"
+			            val t2 = newName "times_R"
+			            val code1 = compileExp e1 vtable t1
+			            val code2 = compileExp e2 vtable t2
+			        in code1 @ code2 @ [Mips.MUL (place,t1,t2)]
+			        end
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+\subsection{AND and OR}
+Moving on to the implementation of the boolean literals, AND and OR, we again start out with creating test files.\\
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{and.fo} &
+		\begin{verbatim}
+			fun bool FAnd(bool a, bool b) = a && b
+			
+			fun bool main() =
+			    let a = read(bool) in
+			    let b = read(bool) in
+			    let c = write(FAnd(a,a)) in
+			    let d = write(FAnd(b,b)) in
+			    let e = write(FAnd(a,b)) in
+			    write(FAnd(b,a))
+		
+		\end{verbatim}
+		\\
+		\command{and.in} &
+		\begin{verbatim}
+		1
+		0
+		
+		\end{verbatim}
+		\\
+		\command{and.out} &
+		\begin{verbatim}
+		truefalsefalsefalse
+		
+		\end{verbatim}
+		\\
+		\command{or.fo} &
+		\begin{verbatim}
+			fun bool orTest(bool a, bool b) = a || b
+			
+			fun bool main() =
+			    let a = read(bool) in
+			    let b = read(bool) in
+			    let c = write(orTest(b,b)) in
+			    let d = write(orTest(a,a)) in
+			    let e = write(orTest(a,b)) in
+			    write(orTest(b,a))
+		
+		\end{verbatim}
+		\\
+		\command{or.in} &
+		\begin{verbatim}
+		1
+		0
+		
+		\end{verbatim}
+		\\
+		\command{or.out} &
+		\begin{verbatim}
+		falsetruetruetrue
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+After creating the test files, we swiftly move on to the lexer
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{Lexer.lex} &
+		\begin{verbatim}
+			| "&&"  { Parser.AND  (getPos lexbuf) }
+			| "||"  { Parser.OR   (getPos lexbuf) }
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+In the parser, we add AND and OR to the "TRUE FALSE" token as well as added to the expression list.
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{Parser.grm} &
+		\begin{verbatim}
+		%token <(int*int)> TRUE FALSE AND OR
+				
+		\end{verbatim}
+		\\
+		\command{Parser.grm} &
+		\begin{verbatim}
+		Exp :
+		        | Exp AND Exp { And ($1, $3, $2) }
+		        | Exp OR  Exp { Or  ($1, $3, $2) }
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+Moving on to the type checker, we make sure that we can properly check the used types, when using the boolean literals AND and OR
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{TypeChecker.sml} &
+		\begin{verbatim}
+			| In.And (e1, e2, pos)
+			  => let val (t1, e1') = checkExp ftab vtab e1
+			         val (t2, e2') = checkExp ftab vtab e2
+			     in case (t1 = t2, t1) of
+			             (false, _) => raise Error ("And cannot take "^ ppType t1 ^
+			                    "and "^ppType t2, pos)
+			           | (true, Array _) => raise Error ("And cannot oporate on arrays", pos)
+			           | _ => (Bool, Out.And (e1', e2', pos))
+			    end
+			| In.Or (e1, e2, pos)
+			  => let val (t1, e1') = checkExp ftab vtab e1
+			         val (t2, e2') = checkExp ftab vtab e2
+			     in case (t1 = t2, t1) of
+			             (false, _) => raise Error ("Or cannot take "^ ppType t1 ^
+			                    "and "^ppType t2, pos)
+			           | (true, Array _) => raise Error ("Or cannot operate on arrays", pos)
+			           | _ => (Bool, Out.Or (e1', e2', pos))
+			     end
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+We go ahead and implement them in our interpreter
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{Interpreter.sml} &
+		\begin{verbatim}
+			| evalExp (And (e1, e2, pos), vtab, ftab) =
+			      let val res1 = evalExp(e1, vtab, ftab)
+			          val res2 = evalExp(e2, vtab, ftab)
+			      in  case (res1, res2) of
+			            (BoolVal n1, BoolVal n2) => BoolVal (n1 andalso n2)
+			          | _ => invalidOperands "OR on non-boolean args: " [(Int, Int)] res1 res2 pos
+			      end
+			  
+			| evalExp (Or (e1, e2, pos), vtab, ftab) =
+			      let val res1 = evalExp(e1, vtab, ftab)
+			          val res2 = evalExp(e2, vtab, ftab)
+			      in  case (res1, res2) of
+			            (BoolVal n1, BoolVal n2) => BoolVal (n1 orelse n2)
+			          | _ => invalidOperands "AND on non-boolean args: " [(Int, Int)] res1 res2 pos
+			      end
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+Finally we add thr short-circuit AND and OR to the MIPS code generator
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{CodeGen.sml} &
+		\begin{verbatim}
+			| And (e1, e2, pos) =>
+			  let val t1 = newName "and_L"
+			      val t2 = newName "and_R"
+			      val code1 = compileExp e1 vtable t1
+			      val code2 = compileExp e2 vtable t2
+			      val finish = newName "finish"
+			  in  code1 @
+			      [ Mips.LI (place,"0")
+			      , Mips.BEQ (t1, "0", finish) ] @
+			      code2 @
+			      [ Mips.BEQ (t2, "0", finish)
+			      , Mips.LI (place, "1")
+			      , Mips.LABEL finish ]
+			  end
+			
+			| Or (e1, e2, pos) =>
+			  let val t1 = newName "or_L"
+			      val t2 = newName "or_R"
+			      val code1 = compileExp e1 vtable t1
+			      val code2 = compileExp e2 vtable t2
+			      val finish = newName "finish"
+			  in  code1 @
+			      [ Mips.LI (place,"1")
+			      , Mips.BNE (t1, "0", finish) ] @
+			      code2 @
+			      [ Mips.BNE (t2, "0", finish)
+			      , Mips.LI (place, "0")
+			      , Mips.LABEL finish ]
+			  end
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
 \section{Results}
 \section{Conclusion}
 

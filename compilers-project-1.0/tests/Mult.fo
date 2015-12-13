@@ -1,5 +1,5 @@
-fun int Addi(int a) = a * 2
+fun int Mult(int a) = a * 2
 
 fun int main() =
   let a = read(int) in
-  write(Addi(a))
+  write(Mult(a))

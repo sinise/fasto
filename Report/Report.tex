@@ -1,6 +1,7 @@
 \documentclass[]{article}
 \usepackage{parskip} %Removes paragraph line indents
 \usepackage{tabu}
+\usepackage{microtype}
 \usepackage{booktabs,array}
 
 
@@ -20,6 +21,9 @@
 \begin{document}
 
 \maketitle
+\newpage
+
+\tableofcontents
 \newpage
 
 \textbf{Contents of the Report}\\
@@ -49,7 +53,7 @@ detail. You might be penalized if your report includes too many irrelevant detai
 \section{Introduction}
 	We're given the grand task of 
 \section{Implementation}
-	Each implementation step is presented in the order, which the the code is passed through: Lexer -> Parser -> Interpreter -> Type Checker -> MIPS Code Generator
+	Each implementation step is presented in the order, which the the code is passed through: Lexer $\rightarrow$ Parser $\rightarrow$ Interpreter $\rightarrow$ Type Checker $\rightarrow$ MIPS Code Generator
 	
 	\subsection*{Notes}
 		\begin{itemize}
@@ -96,7 +100,7 @@ detail. You might be penalized if your report includes too many irrelevant detai
 Then we implement the True/False token in our parser as well as add True and False to the expression list\\
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{275pt}}
 		\toprule
 		File name & Code\\
 		\midrule
@@ -119,11 +123,11 @@ Then we implement the True/False token in our parser as well as add True and Fal
 And finally we add the boolean constants to our MIPS code generator\\
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{325pt}}
 		\toprule
-		File name & Code\\
+		& \verb|CodeGen.sml|\\
 		\midrule
-		\command{CodeGen.sml} &
+		&
 		\begin{verbatim}
 			| Constant (BoolVal b, pos) => 
 			    if b then
@@ -194,11 +198,11 @@ Moving on to the implementation of multiplication and division, we again start o
 After creating the test files, we swiftly move on to the lexer
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{322pt}}
 		\toprule
-		File name & Code\\
+		& \verb|Lexer.lex|\\
 		\midrule
-		\command{Lexer.lex} &
+		&
 		\begin{verbatim}
 			| `*`  { Parser.TIMES  (getPos lexbuf) }
 			| `/`  { Parser.DIVIDE (getPos lexbuf) }
@@ -242,11 +246,11 @@ In the parser, we add TIMES and DIVIDE to the already created "PLUS MINUS DEQ EQ
 Moving on to the type checker, we make sure that we can properly check the used types, when doing multiplication and division
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{330pt}}
 		\toprule
-		File name & Code\\
+		& \verb|TypeChecker.sml|\\
 		\midrule
-		\command{TypeChecker.sml} &
+		&
 		\begin{verbatim}
 		and checkExp ftab vtab (exp : In.Exp)
 		  = case exp of
@@ -254,13 +258,15 @@ Moving on to the type checker, we make sure that we can properly check the used 
 		    .
 		    .
 		    | In.Times (e1, e2, pos)
-		      => let val (_, e1_dec, e2_dec) = checkBinOp ftab vtab (pos, Int, e1, e2)
+		      => let val (_, e1_dec, e2_dec) =
+			             checkBinOp ftab vtab (pos, Int, e1, e2)
 		         in (Int,
 		             Out.Times (e1_dec, e2_dec, pos))
 		         end
 		 
 		    | In.Divide (e1, e2, pos)
-		      => let val (_, e1_dec, e2_dec) = checkBinOp ftab vtab (pos, Int, e1, e2)
+		      => let val (_, e1_dec, e2_dec) =
+		                 checkBinOp ftab vtab (pos, Int, e1, e2)
 		         in (Int,
 		             Out.Divide (e1_dec, e2_dec, pos))
 		         end		
@@ -273,18 +279,20 @@ Moving on to the type checker, we make sure that we can properly check the used 
 We go ahead and implement them in our interpreter
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{330pt}}
 		\toprule
-		File name & Code\\
+		& \verb|Interpreter.sml|\\
 		\midrule
-		\command{Interpreter.sml} &
+		&
 		\begin{verbatim}
 			| evalExp ( Times(e1, e2, pos), vtab, ftab ) =
 			      let val res1   = evalExp(e1, vtab, ftab)
 			          val res2   = evalExp(e2, vtab, ftab)
 			      in  case (res1, res2) of
 			              (IntVal n1, IntVal n2) => IntVal (n1*n2)
-			            | _ => invalidOperands  "Multiplication on non-integral args: " [(Int, Int)] res1 res2 pos
+			            | _ => invalidOperands
+			                   "Multiplication on non-integral args: " 
+			                   [(Int, Int)] res1 res2 pos
 			      end
 			  
 			| evalExp ( Divide(e1, e2, pos), vtab, ftab ) =
@@ -292,7 +300,9 @@ We go ahead and implement them in our interpreter
 			          val res2   = evalExp(e2, vtab, ftab)
 			      in  case (res1, res2) of
 			              (IntVal n1, IntVal n2) => IntVal (n1 div n2)
-			            | _ => invalidOperands "Division on non-integral args: " [(Int, Int)] res1 res2 pos
+			            | _ => invalidOperands
+			                   "Division on non-integral args: " 
+			                   [(Int, Int)] res1 res2 pos
 			      end
 		\end{verbatim}
 		\\
@@ -303,11 +313,11 @@ We go ahead and implement them in our interpreter
 Finally they're added to the MIPS code generator
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{330pt}}
 		\toprule
-		File name & Code\\
+		& \verb|CodeGen.sml|\\
 		\midrule
-		\command{CodeGen.sml} &
+		&
 		\begin{verbatim}
 			fun compileExp e vtable place =
 			    case e of
@@ -402,11 +412,11 @@ Moving on to the implementation of the boolean literals, AND and OR, we again st
 After creating the test files, we swiftly move on to the lexer
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{322pt}}
 		\toprule
-		File name & Code\\
+		& \verb|Lexer.lex|\\
 		\midrule
-		\command{Lexer.lex} &
+		&
 		\begin{verbatim}
 			| "&&"  { Parser.AND  (getPos lexbuf) }
 			| "||"  { Parser.OR   (getPos lexbuf) }
@@ -443,28 +453,32 @@ In the parser, we add AND and OR to the "TRUE FALSE" token as well as added to t
 Moving on to the type checker, we make sure that we can properly check the used types, when using the boolean literals AND and OR
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{330pt}}
 		\toprule
-		File name & Code\\
+		& \verb|TypeChecker.sml|\\
 		\midrule
-		\command{TypeChecker.sml} &
+		&
 		\begin{verbatim}
 			| In.And (e1, e2, pos)
 			  => let val (t1, e1') = checkExp ftab vtab e1
 			         val (t2, e2') = checkExp ftab vtab e2
 			     in case (t1 = t2, t1) of
-			             (false, _) => raise Error ("And cannot take "^ ppType t1 ^
-			                    "and "^ppType t2, pos)
-			           | (true, Array _) => raise Error ("And cannot oporate on arrays", pos)
+			             (false, _) => raise Error
+			                           ("And cannot take "^ ppType t1 ^
+			                            "and "^ppType t2, pos)
+			           | (true, Array _) => 
+			             raise Error ("And cannot oporate on arrays", pos)
 			           | _ => (Bool, Out.And (e1', e2', pos))
 			    end
 			| In.Or (e1, e2, pos)
 			  => let val (t1, e1') = checkExp ftab vtab e1
 			         val (t2, e2') = checkExp ftab vtab e2
 			     in case (t1 = t2, t1) of
-			             (false, _) => raise Error ("Or cannot take "^ ppType t1 ^
-			                    "and "^ppType t2, pos)
-			           | (true, Array _) => raise Error ("Or cannot operate on arrays", pos)
+			             (false, _) => raise Error 
+			                           ("Or cannot take "^ ppType t1 ^
+			                            "and "^ppType t2, pos)
+			           | (true, Array _) => 
+			             raise Error ("Or cannot operate on arrays", pos)
 			           | _ => (Bool, Out.Or (e1', e2', pos))
 			     end
 		\end{verbatim}
@@ -476,18 +490,19 @@ Moving on to the type checker, we make sure that we can properly check the used 
 We go ahead and implement them in our interpreter
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{330pt}}
 		\toprule
-		File name & Code\\
+		& \verb|Interpreter.sml|\\
 		\midrule
-		\command{Interpreter.sml} &
+		&
 		\begin{verbatim}
 			| evalExp (And (e1, e2, pos), vtab, ftab) =
 			      let val res1 = evalExp(e1, vtab, ftab)
 			          val res2 = evalExp(e2, vtab, ftab)
 			      in  case (res1, res2) of
 			            (BoolVal n1, BoolVal n2) => BoolVal (n1 andalso n2)
-			          | _ => invalidOperands "OR on non-boolean args: " [(Int, Int)] res1 res2 pos
+			          | _ => invalidOperands "OR on non-boolean args: "
+			                 [(Int, Int)] res1 res2 pos
 			      end
 			  
 			| evalExp (Or (e1, e2, pos), vtab, ftab) =
@@ -495,7 +510,8 @@ We go ahead and implement them in our interpreter
 			          val res2 = evalExp(e2, vtab, ftab)
 			      in  case (res1, res2) of
 			            (BoolVal n1, BoolVal n2) => BoolVal (n1 orelse n2)
-			          | _ => invalidOperands "AND on non-boolean args: " [(Int, Int)] res1 res2 pos
+			          | _ => invalidOperands "AND on non-boolean args: "
+			                 [(Int, Int)] res1 res2 pos
 			      end
 		\end{verbatim}
 		\\
@@ -508,9 +524,9 @@ Finally we add thr short-circuit AND and OR to the MIPS code generator
 \begin{center}	
 	\begin{tabular}{lV{280pt}}
 		\toprule
-		File name & Code\\
+		& \verb|CodeGen.sml|\\
 		\midrule
-		\command{CodeGen.sml} &
+		&
 		\begin{verbatim}
 			| And (e1, e2, pos) =>
 			  let val t1 = newName "and_L"
@@ -541,6 +557,213 @@ Finally we add thr short-circuit AND and OR to the MIPS code generator
 			      , Mips.LI (place, "0")
 			      , Mips.LABEL finish ]
 			  end
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+\subsection{Not and Negation}
+Lastly for this task, we will implement Not and Negation. We will, once again, start out with creating test files.\\
+
+\begin{center}	
+	\begin{tabular}{lV{275pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{not.fo} &
+		\begin{verbatim}
+			fun bool notFun(bool t) = not t
+			
+			fun bool main() =
+			    let a = read(bool) in
+			    let b = read(bool) in
+			    let c = write(notFun(a)) in
+			    write(notFun(b))
+		
+		\end{verbatim}
+		\\
+		\command{not.in} &
+		\begin{verbatim}
+			1
+			0
+		
+		\end{verbatim}
+		\\
+		\command{not.out} &
+		\begin{verbatim}
+			falsetrue
+		
+		\end{verbatim}
+		\\
+		\command{negate.fo} &
+		\begin{verbatim}
+			fun bool write_nl(bool b) =
+			    let res = write(b) in
+			    let tmp = write("\n") in
+			    res
+			
+			fun bool main() =
+			    let x0 = write_nl(3 / 2 == 1) in
+			    let x1 = write_nl(~3 / 2 == ~2) in
+			    let x2 = write_nl(3 /~2 == ~2) in
+			    let x3 = write_nl(~3 /~2 == 1) in
+			    write_nl(x0 && x1 && x2 && x3)
+		
+		\end{verbatim}
+		\\
+		\command{negate.in} &
+		\begin{verbatim}
+		
+		
+		\end{verbatim}
+		\\
+		\command{negate.out} &
+		\begin{verbatim}
+			true
+			false
+			false
+			true
+			false
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+After creating the test files, we move on to the lexer
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{Lexer.lex} &
+		\begin{verbatim}
+			| "not" => Parser.NOT pos
+			
+		\end{verbatim}
+		\\
+		\command{Lexer.lex} &
+		\begin{verbatim}
+			| `~` { Parser.NEGATE (getPos lexbuf) }
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+In the parser, we add Not and Negate to the "TRUE FALSE AND OR" token. We also include them in \verb|%nonassoc ifprec letprec| making sure, they are nonassiciative. And lastly, we add the expressions to the expressionlist.
+
+\begin{center}	
+	\begin{tabular}{lV{280pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{Parser.grm} &
+		\begin{verbatim}
+			%token <(int*int)> TRUE FALSE AND OR NOT NEGATE
+		
+		\end{verbatim}
+		\\
+		\command{Parser.grm} &
+		\begin{verbatim}
+			%nonassoc NOT
+			%nonassoc NEGATE
+		
+		\end{verbatim}
+		\\
+		\command{Parser.grm} &
+		\begin{verbatim}
+			Exp :
+			        | NOT Exp    { NOT    ($2, $1) }
+			        | NEGATE Exp { NEGATE ($2, $1) }
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+Moving on to the type checker, we make sure that we can properly check the used types, when using Not and Negate.
+
+\begin{center}	
+	\begin{tabular}{lV{330pt}}
+		\toprule
+		& \verb|TypeChecker.sml|\\
+		\midrule
+		&
+		\begin{verbatim}
+			| In.Not (e, pos)
+			  => let val (t1, e') = checkExp ftab vtab e
+			     in  case (t1) of
+			           (Bool) => (Bool, Out.Not (e', pos))
+			         | _ => raise Error ("Invalid Argument type", pos)
+			     end
+			
+			| In.Negate (e, pos)
+			  => let val (t1, e') = checkExp ftab vtab e
+			     in  case (t1) of
+			           (Int) => (Int, Out.Negate (e', pos))
+			         | _ => raise Error ("Invalid Argument type", pos)
+			     end
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+We go ahead and implement them in our interpreter.
+
+\begin{center}	
+	\begin{tabular}{lV{330pt}}
+		\toprule
+		& \verb|Interpreter.sml|\\
+		\midrule
+		&
+		\begin{verbatim}
+			| evalExp ( Not(e, pos), vtab, ftab ) =
+			      let val res = evalExp(e, vtab, ftab)
+			      in  case (res) of
+			            (BoolVal n) => BoolVal (if n then false else true)
+			          | _ => invalidOperand "NOT on non-boolean args: " 
+			                 Bool res pos
+			      end
+			
+			| evalExp ( Negate(e, pos), vtab, ftab ) =
+			      let val res = evalExp(e, vtab, ftab)
+			      in  case (res) of
+			            (IntVal n) => IntVal (n * (~1))
+			          | _ => invalidOperand "Negate on non-integer args: " 
+			                 Int res pos
+			      end
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+Finally we add the expressions to the MIPS code generator
+
+\begin{center}	
+	\begin{tabular}{lV{330pt}}
+		\toprule
+		& \verb|CodeGen.sml|\\
+		\midrule
+		&
+		\begin{verbatim}
+			| Not (e', pos) =>
+			      let val t1 = newName "bool"
+			          val code = compileExp e' vtable t1
+			      in  code @ 
+			          [Mips.XORI (place, t1, "1")]
+			      end
+			
+			
+			| Negate (e', pos) =>
+			         let val t1 = newName "negate"
+			             val code = compileExp e' vtable t1
+			         in  code @ [Mips.SUB (place, "0", t1)]
+			         end
 		\end{verbatim}
 		\\
 		\bottomrule \\

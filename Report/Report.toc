@@ -1,0 +1,8 @@
+\contentsline {section}{\numberline {1}Introduction}{3}
+\contentsline {section}{\numberline {2}Implementation}{3}
+\contentsline {subsection}{\numberline {2.1}True/False}{4}
+\contentsline {subsection}{\numberline {2.2}Multiplication and Division}{5}
+\contentsline {subsection}{\numberline {2.3}AND and OR}{8}
+\contentsline {subsection}{\numberline {2.4}Not and Negation}{12}
+\contentsline {section}{\numberline {3}Results}{15}
+\contentsline {section}{\numberline {4}Conclusion}{15}

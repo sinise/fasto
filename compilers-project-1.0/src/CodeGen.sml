@@ -152,7 +152,7 @@ fun applyRegs( fid: string,
 fun applyFunArg(FunName S, args, vtable, place, pos): Mips.Prog =
         let val tmp = newName "tmpreg"
         in 
-            applyReg (s, args, tmp, pos) @ [Mips.move(place, tmp)] 
+            applyRegs (s, args, tmp, pos) @ [Mips.move(place, tmp)] 
         end
 
   | applyFunArg(Lambda (_, params, body, epos), args, vtable, place, pos) =

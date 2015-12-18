@@ -273,15 +273,15 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
   | evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) = 
         let val ArrayVal(ls, tpvar) = evalExp(arrexp, vtab, ftab)
             val rtp = rtpFunArg(farg, ftab, pos)
-            val f2 = farg
-            val f = (fn x => let val (result, tp) = evalFunArg(farg, vtab, ftab, pos, [x]) 
-                             in tp result end)
+            val f = (fn x => evalFunArg(farg, vtab, ftab, pos, [x]))
         in
-            ArrayVal (map (f) (ls), rtp)
+          ArrayVal (map (f) (ls), rtp)
         end
 
 
-(*callFunWithVtable (FunDec (fid, rtp, fargs, body, pdcl), aargs, vtab, ftab, pcall)*)
+(*            
+
+  callFunWithVtable (FunDec (fid, rtp, fargs, body, pdcl), aargs, vtab, ftab, pcall)*)
 
   | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =
     raise Fail "Unimplemented feature reduce"

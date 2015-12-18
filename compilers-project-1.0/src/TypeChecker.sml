@@ -234,10 +234,11 @@ and checkExp ftab vtab (exp : In.Exp)
                
     | In.Map (f, arr_exp, _, _, pos)                                   (*Moded*)
       => let val (fnew, f_returntp, f_argument) = checkFunArg(f, vtab, ftab, pos)
-             val arr_exp_tp = checkExp ftab vtab arr_exp
-             val arr_eltp = case arr_eltp of
+             val (arr_exp_tp, decvar) = checkExp ftab vtab arr_exp
+             (*val arr_eltp = case arr_eltp of
                                 Array t => t
-                              | _ => Error ("Map: wrong type of array exp")
+                              | _ => Error ("Map: wrong type of array exp")*)
+             val arr_eltp = valueType(arr_exp)
              val f_argtp =  case f_argument of
                                 [tp] => tp
                               |  _ => Error ("Map Wrong argument fn type ")

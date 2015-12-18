@@ -271,11 +271,11 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
         end
 
   | evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) = 
-        let val (ls, tpvar) = evalExp(arrexp, vtab, ftab)
+        let val expresion = evalExp(arrexp, vtab, ftab)
             val rtp = rtpFunArg(farg, ftab, pos)
             val f = (fn x => evalFunArg(farg, vtab, ftab, pos, [x]))
         in
-          case (ls, tpvar) of
+          case expresion of
               ArrayVal (ls, tpvar) => ArrayVal (map (f) (ls), rtp)
             | _ => raise Error ("Argument need to be an ArrayVal", pos)
         end

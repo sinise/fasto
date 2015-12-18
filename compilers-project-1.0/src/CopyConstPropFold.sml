@@ -29,6 +29,7 @@ fun copyConstPropFoldExp vtable e =
           |  _ =>
                Index (name, copyConstPropFoldExp vtable e, t, pos))
       | Let (Dec (name, e, decpos), body, pos) =>
+      raise Fail ("not implemented")(*
         let val e' = copyConstPropFoldExp vtable e
         in case e' of
                Var (varname, _) =>
@@ -36,6 +37,7 @@ fun copyConstPropFoldExp vtable e =
                    val body2 = copyConstPropFoldExp vtable2 body
                 in 
                    Let (Dec, (name, e', decpos), body2, pos))
+                    
                 end
 
              | Constant (value, _) =>
@@ -48,11 +50,7 @@ fun copyConstPropFoldExp vtable e =
                let val body' = copyConstPropFoldExp vtable body
                in Let (Dec (name, e', decpos), body', pos)
                end
-        end
-
-
-
-
+        end *)
       | Times (e1, e2, pos) =>
         let val e1' = copyConstPropFoldExp vtable e1
             val e2' = copyConstPropFoldExp vtable e2

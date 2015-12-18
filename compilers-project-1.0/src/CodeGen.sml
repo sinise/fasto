@@ -129,41 +129,6 @@ fun dynalloc (size_reg : string,
     in code1 @ code2 @ code3
     end
 
-(* Pushing arguments on the stack: *)
-(* For each register 'r' in 'rs', copy them to registers from
-'firstReg' and counting up. Return the full code and the next unused
-register (firstReg + num_args).  *)
-fun applyRegs( fid: string,
-               args: string list,
-               place: string, pos) : Mips.Prog =
-    let val regs_num = length args
-        val caller_regs =
-            List.tabulate (regs_num, fn n => makeConst (n + minReg))
-        (* zipWith Mips.MOVE =
-           zipWith (fn (regDest, regSrc) => Mips.MOVE (regDest, regSrc)) *)
-        val move_code = ListPair.map Mips.MOVE (caller_regs, args)
-    in
-      if regs_num > maxCaller - minReg
-      then raise Error("Number of arguments passed to "^fid^
-                       " exceeds number of caller registers", pos)
-      else move_code @ [ Mips.JAL(fid,caller_regs), Mips.MOVE(place, "2") ]
-  end
-
-fun applyFunArg(FunName S, args, vtable, place, pos): Mips.Prog =
-        let val tmp = newName "tmpreg"
-        in 
-            applyRegs (s, args, tmp, pos) @ [Mips.move(place, tmp)] 
-        end
-
-  | applyFunArg(Lambda (_, params, body, epos), args, vtable, place, pos) =
-        let fun bindParams (Param (pname,_)::params') (arg::args') vtable' = 
-                bindParams params' args' (SymTab.bind pname arg vtable')
-              | bindParams _ _ vtable' = vtable'
-            val vtable' = bindParams params args vtable
-            val tmp = newName "fun arg_regs"
-        in
-            compileExp body vtable' tmp @ [Mips.MOVE(place, tmp)] 
-        end
 
 (* Compile 'e' under bindings 'vtable', putting the result in its 'place'. *)
 fun compileExp e vtable place =
@@ -183,8 +148,6 @@ fun compileExp e vtable place =
           [ Mips.LI (place, makeConst 1) ] 
       else
           [ Mips.LI (place, makeConst 0) ]
- 
-
   (* Create/return a label here, collect all string literals of the program
      (in stringTable), and create them in the data section before the heap
      (Mips.ASCIIZ) *)
@@ -565,7 +528,43 @@ and compileDec (Dec (s,e,pos)) vtable =
           val code = compileExp e vtable t
           val new_vtable = SymTab.bind s t vtable
       in (code, new_vtable)
-      end
+      end 
+  (* Pushing arguments on the stack: *)
+(* For each register 'r' in 'rs', copy them to registers from
+'firstReg' and counting up. Return the full code and the next unused
+register (firstReg + num_args).  *)
+and applyRegs( fid: string,
+               args: string list,
+               place: string, pos) : Mips.Prog =
+    let val regs_num = length args
+        val caller_regs =
+            List.tabulate (regs_num, fn n => makeConst (n + minReg))
+        (* zipWith Mips.MOVE =
+           zipWith (fn (regDest, regSrc) => Mips.MOVE (regDest, regSrc)) *)
+        val move_code = ListPair.map Mips.MOVE (caller_regs, args)
+    in
+      if regs_num > maxCaller - minReg
+      then raise Error("Number of arguments passed to "^fid^
+                       " exceeds number of caller registers", pos)
+      else move_code @ [ Mips.JAL(fid,caller_regs), Mips.MOVE(place, "2") ]
+  end
+
+and applyFunArg(FunName s, args, vtable, place, pos): Mips.Prog =
+        let val tmp = newName "tmpreg"
+        in 
+            applyRegs (s, args, tmp, pos) @ [Mips.MOVE(place, tmp)] 
+        end
+
+  | applyFunArg(Lambda (_, params, body, epos), args, vtable, place, pos) =
+        let fun bindParams (Param (pname,_)::params') (arg::args') vtable' = 
+                bindParams params' args' (SymTab.bind pname arg vtable')
+              | bindParams _ _ vtable' = vtable'
+            val vtable' = bindParams params args vtable
+            val tmp = newName "fun arg_regs"
+        in
+            compileExp body vtable' tmp @ [Mips.MOVE(place, tmp)] 
+        end
+
 
 (* code for saving and restoring callee-saves registers *)
 fun stackSave currentReg maxReg savecode restorecode offset =

@@ -65,7 +65,7 @@ fun copyConstPropFoldExp vtable e =
         let val e1' = copyConstPropFoldExp vtable e1
             val e2' = copyConstPropFoldExp vtable e2
         in case (e1', e2') of
-               (Constant (BoolVal x, _), Constant (BoolVal y, _)) => Constant (BoolVal (x andalso y))
+               (Constant (BoolVal x, _), Constant (BoolVal y, _)) => Constant (BoolVal (x andalso y), pos)
              | _ => And (e1', e2', pos) 
         end
 

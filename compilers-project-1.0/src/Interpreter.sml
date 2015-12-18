@@ -270,23 +270,24 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
              | _ => raise Error("Iota argument is not a number: "^ppVal 0 sz, pos)
         end
 
-  | evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) = 
-        let val expresion = evalExp(arrexp, vtab, ftab)
+  | evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) =            (*Moded*)
+        let val expression = evalExp(arrexp, vtab, ftab)
             val rtp = rtpFunArg(farg, ftab, pos)
             val f = (fn x => evalFunArg(farg, vtab, ftab, pos, [x]))
         in
-          case expresion of
+          case expression of
               ArrayVal (ls, tpvar) => ArrayVal (map (f) (ls), rtp)
             | _ => raise Error ("Argument need to be an ArrayVal", pos)
         end
 
-  | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =
-        let val expresion = evalExp(arrexp, vtab, ftab)
+  | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =        (*Moded*)
+        let val expression = evalExp(arrexp, vtab, ftab)
+            val neut_exp   = evalExp(ne, vtab, ftab)
             val rtp = rtpFunArg(farg, ftab, pos)
-            val f = (fn x => evalFunArg(farg, vtab, ftab, pos, [x]))
+            val f = (fn (x, y) => evalFunArg(farg, vtab, ftab, pos, [x, y]))
         in
-          case expresion of
-              ArrayVal (ls, tpvar) => ArrayVal (map (f) (ls), rtp)
+          case expression of
+              ArrayVal (ls, tpvar) => (foldl (f) (neut_exp) (ls))
             | _ => raise Error ("Argument need to be an ArrayVal", pos)
         end
 

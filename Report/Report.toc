@@ -8,5 +8,6 @@
 \contentsline {subsection}{\numberline {2.2}Task 2}{10}
 \contentsline {subsubsection}{\numberline {2.2.1}map}{10}
 \contentsline {subsubsection}{\numberline {2.2.2}reduce}{12}
+\contentsline {subsection}{\numberline {2.3}Task 3}{12}
 \contentsline {section}{\numberline {3}Results}{12}
 \contentsline {section}{\numberline {4}Conclusion}{12}

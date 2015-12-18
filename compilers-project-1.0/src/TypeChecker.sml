@@ -231,7 +231,7 @@ and checkExp ftab vtab (exp : In.Exp)
             else raise Error ("Iota: wrong argument type " ^
                               ppType e_type, pos)
          end
-               
+
     | In.Map (f, arr_exp, _, _, pos)                                   (*Moded*)
       => let val (arr_exp_tp, decvar) = checkExp ftab vtab arr_exp
              val (fnew, f_returntp, f_argument) = checkFunArg(f, vtab, ftab, pos)
@@ -247,7 +247,17 @@ and checkExp ftab vtab (exp : In.Exp)
          end
 
     | In.Reduce (f, n_exp, arr_exp, _, pos)
-      => raise Fail "Unimplemented feature reduce"
+      => let val (fnew, f_returntp, f_argument) = checkFunArg(f, vtab, ftab, pos)
+             val (e_type, n_exp_dec) = checkExp ftab vtab n_exp
+             val (arr_exp_tp, decvar) = checkExp ftab vtab arr_exp
+             val f_argtp =  case f_argument of
+                                [tp] => tp
+                              |  _ => Error ("Reduce: Wrong argument fn type ")
+         in if e_type = Int andalso arr_eltp = f_argtp
+            then (Array Int, Out.Iota (n_exp_dec, pos))
+            else raise Error ("Reduce: Wrong argument type " ^
+                              ppType e_type, pos)
+         end
 
 and checkFunArg (In.FunName fname, vtab, ftab, pos) =
     (case SymTab.lookup fname ftab of

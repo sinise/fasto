@@ -29,15 +29,14 @@ fun copyConstPropFoldExp vtable e =
           |  _ =>
                Index (name, copyConstPropFoldExp vtable e, t, pos))
       | Let (Dec (name, e, decpos), body, pos) =>
-      raise Fail ("not implemented")
+      
         let val e' = copyConstPropFoldExp vtable e
         in case e' of
                Var (varname, _) =>
                let val vtable2 = SymTab.bind name (VarProp varname) vtable
                    val body2 = copyConstPropFoldExp vtable2 body
                 in 
-                   Let (Dec, (name, e', decpos), body2, pos))
-                    
+                   Let (Dec (name, e', decpos), body2, pos)
                 end
 
              | Constant (value, _) =>

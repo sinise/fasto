@@ -280,7 +280,7 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
             | _ => raise Error ("Argument need to be an ArrayVal", pos)
         end
 
-  | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =        (*Moded*)
+  | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =       (*Moded*)
         let val expression = evalExp(arrexp, vtab, ftab)
             val neut_exp   = evalExp(ne, vtab, ftab)
             val rtp = rtpFunArg(farg, ftab, pos)

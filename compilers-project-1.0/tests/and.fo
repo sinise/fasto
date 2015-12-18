@@ -1,9 +1,0 @@
-fun bool FAnd(bool a, bool b) = a && b
-
-fun bool main() =
-  let a = read(bool) in
-  let b = read(bool) in
-  let c = write(FAnd(a,a)) in
-  let d = write(FAnd(b,b)) in
-  let e = write(FAnd(a,b)) in
-  write(FAnd(b,a))

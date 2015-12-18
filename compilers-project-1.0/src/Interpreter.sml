@@ -271,13 +271,17 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
         end
 
   | evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) = 
-        let val ls = evalExp(arrexp, vtab,ftab)
+        let val ArrayVal(ls, tpvar) = evalExp(arrexp, vtab, ftab)
+            val rtp = rtpFunArg(farg, ftab, pos)
+            val f2 = farg
+            val f = (fn x => let val (result, tp) = evalFunArg(farg, vtab, ftab, pos, [x]) 
+                             in tp result end)
         in
-            map (fn x => let val (result, tp) = evalFunArg(farg, vtab,ftab, pos, x) 
-                            in result end ) 
-           ls
+            ArrayVal (map (f) (ls), rtp)
         end
 
+
+(*callFunWithVtable (FunDec (fid, rtp, fargs, body, pdcl), aargs, vtab, ftab, pcall)*)
 
   | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =
     raise Fail "Unimplemented feature reduce"
@@ -345,8 +349,8 @@ and evalFunArg (FunName fid, vtab, ftab, callpos, aargs) =
       val fexp = SymTab.lookup fid ftab
     in
       case fexp of
-        NONE   => raise Error("Call to known function "^fid, callpos)
-      | SOME f => callFunWithVtable(f, aargs, SymTab.empty(), ftab, callpos)
+          NONE   => raise Error("Call to known function "^fid, callpos)
+        | SOME f => callFunWithVtable(f, aargs, SymTab.empty(), ftab, callpos)
     end
   | evalFunArg (Lambda (rettype, params, body, fpos), vtab, ftab, callpos, aargs) =
     callFunWithVtable ( FunDec ("<anonymous>", rettype, params, body, fpos)

@@ -43,6 +43,7 @@
        | "not"          => Parser.NOT pos                             (*moded*)
        | "iota"         => Parser.IOTA pos                            (*moded*)
        | "map"          => Parser.MAP pos                             (*moded*)
+       | "reduce"       => Parser.REDUCE pos                          (*moded*)
        
 (* specials: *)
        | "read"         => Parser.READ pos
@@ -77,23 +78,23 @@ rule Token = parse
 			     | SOME s => String.substring(s,1,
 							  String.size s - 2)),
 			     getPos lexbuf) }
-  | `*`                 { Parser.TIMES  (getPos lexbuf) }  (*moded*)
-  | `/`                 { Parser.DIVIDE (getPos lexbuf) }  (*moded*)
-  | `+`                 { Parser.PLUS   (getPos lexbuf) }
-  | `-`                 { Parser.MINUS  (getPos lexbuf) }
-  | "=="                { Parser.DEQ    (getPos lexbuf) }
-  | "&&"                { Parser.AND    (getPos lexbuf) }  (*moded*)
-  | "||"                { Parser.OR     (getPos lexbuf) }  (*moded*)
-  | `~`                 { Parser.NEGATE (getPos lexbuf) }  (*moded*)
-  | "=>"                { Parser.ARROW  (getPos lexbuf) }
-  | `=`                 { Parser.EQ     (getPos lexbuf) }
-  | `<`                 { Parser.LTH    (getPos lexbuf) }
-  | `(`                 { Parser.LPAR   (getPos lexbuf) }
-  | `)`                 { Parser.RPAR   (getPos lexbuf) }
+  | `*`                 { Parser.TIMES    (getPos lexbuf) }  (*moded*)
+  | `/`                 { Parser.DIVIDE   (getPos lexbuf) }  (*moded*)
+  | `+`                 { Parser.PLUS     (getPos lexbuf) }
+  | `-`                 { Parser.MINUS    (getPos lexbuf) }
+  | "=="                { Parser.DEQ      (getPos lexbuf) }
+  | "&&"                { Parser.AND      (getPos lexbuf) }  (*moded*)
+  | "||"                { Parser.OR       (getPos lexbuf) }  (*moded*)
+  | `~`                 { Parser.NEGATE   (getPos lexbuf) }  (*moded*)
+  | "=>"                { Parser.ARROW    (getPos lexbuf) }
+  | `=`                 { Parser.EQ       (getPos lexbuf) }
+  | `<`                 { Parser.LTH      (getPos lexbuf) }
+  | `(`                 { Parser.LPAR     (getPos lexbuf) }
+  | `)`                 { Parser.RPAR     (getPos lexbuf) }
   | `[`                 { Parser.LBRACKET (getPos lexbuf) }
   | `]`                 { Parser.RBRACKET (getPos lexbuf) }
-  | `{`                 { Parser.LCURLY (getPos lexbuf) }
-  | `}`                 { Parser.RCURLY (getPos lexbuf) }
-  | `,`                 { Parser.COMMA (getPos lexbuf) }
-  | eof                 { Parser.EOF (getPos lexbuf) }
+  | `{`                 { Parser.LCURLY   (getPos lexbuf) }
+  | `}`                 { Parser.RCURLY   (getPos lexbuf) }
+  | `,`                 { Parser.COMMA    (getPos lexbuf) }
+  | eof                 { Parser.EOF      (getPos lexbuf) }
   | _                   { lexerError lexbuf "Illegal symbol in input" };

@@ -1,5 +1,0 @@
-fun int Div(int a) = a / 2
-
-fun int main() =
-  let a = read(int) in
-  write(Div(a))

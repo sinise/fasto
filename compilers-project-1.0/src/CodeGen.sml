@@ -508,22 +508,16 @@ fun compileExp e vtable place =
          @ loop_footer
       end
 
-  | Map (farg, arg_exp, elem_type, ret_type, pos) => 
-        let
-          val res_reg = newName()
-          val elem_reg = 
-        in
-          body
-        end
+  | Map (farg, arg_exp, elem_type, ret_type, pos) => raise Fail "Nope!"
     
 
-       val loop_map0 = case getElemSize elemType of
+      (*) val loop_map0 = case getElemSize elemType of
                            One => Mips.LB (res_reg, elem_reg, "0") ::
                            applyfunArg (farg, [res_reg], vtable, res_reg, pos) @ 
                            [Mips.Addi(elem_reg, elem_reg, "1")]
                          | Four => Mips.LW (res_reg, elem_reg, "0") ::
                            applyfunArg (farg, [res_reg], vtable, res_reg, pos) @ 
-                           [Mips.Addi(elem_reg, elem_reg, "4")]
+                           [Mips.Addi(elem_reg, elem_reg, "4")]*)
 
   (* reduce(f, acc, {x1, x2, ...}) = f(..., f(x2, f(x1, acc))) *)
   | Reduce (binop, acc_exp, arr_exp, tp, pos) =>

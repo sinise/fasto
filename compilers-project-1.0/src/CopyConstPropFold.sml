@@ -32,16 +32,27 @@ fun copyConstPropFoldExp vtable e =
         let val e' = copyConstPropFoldExp vtable e
         in case e' of
                Var (varname, _) =>
-               raise Fail "Cannot copy-propagate Var yet"
+               let val vtable2 = SymTab.bind name (VarProp varname) vtable
+                   val body2 = copyConstPropFoldExp vtable2 body
+                in 
+                   Let (Dec, (name, e', decpos), body2, pos))
+                end
+
              | Constant (value, _) =>
-               raise Fail "Cannot copy-propagate Constant yet"
+               let val vtable2 = SymTab.bind name (ConstProp value) vtable
+                   val body2 = copyConstPropFoldExp vtable2 body
+
              | Let (Dec bindee, inner_body, inner_pos) =>
-               raise Fail "Cannot copy-propagate Let yet"
+               copyConstPropFoldExp vtable (Let (Dec bindee, Let (Dec (name, inner_body, inner_pos), body, pos), pos))
              | _ => (* Fallthrough - for everything else, do nothing *)
                let val body' = copyConstPropFoldExp vtable body
                in Let (Dec (name, e', decpos), body', pos)
                end
         end
+
+
+
+
       | Times (e1, e2, pos) =>
         let val e1' = copyConstPropFoldExp vtable e1
             val e2' = copyConstPropFoldExp vtable e2

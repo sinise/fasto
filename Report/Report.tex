@@ -48,7 +48,7 @@
 	To begin with, we're given the sub-task to implement the boolean literals True and False. We start out by creating the following test files:
 	
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{330pt}}
 		\toprule
 		File name & Code\\
 		\midrule
@@ -81,7 +81,7 @@
 Starting at the top of the compiler structure, the lexer is upgraded with the proper true and false keywords
 
 \begin{center}	
-	\begin{tabular}{lV{322pt}}
+	\begin{tabular}{lV{380pt}}
 		\toprule
 		& \verb|Lexer.lex|\\
 		\midrule
@@ -98,7 +98,7 @@ Starting at the top of the compiler structure, the lexer is upgraded with the pr
 Then we implement the True/False token type in our parser as well as add True and False to the expression list.
 
 \begin{center}	
-	\begin{tabular}{lV{275pt}}
+	\begin{tabular}{lV{330pt}}
 		\toprule
 		File name & Code\\
 		\midrule
@@ -121,7 +121,7 @@ Then we implement the True/False token type in our parser as well as add True an
 And finally we add the boolean constants to our MIPS code generator.
 
 \begin{center}	
-	\begin{tabular}{lV{325pt}}
+	\begin{tabular}{lV{380pt}}
 		\toprule
 		& \verb|CodeGen.sml|\\
 		\midrule
@@ -142,7 +142,7 @@ And finally we add the boolean constants to our MIPS code generator.
 Moving on to the implementation of multiplication and division, we again start out with creating test files for each of the two operators.
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{330pt}}
 		\toprule
 		File name & Code\\
 		\midrule
@@ -196,7 +196,7 @@ Moving on to the implementation of multiplication and division, we again start o
 After creating the test files, we swiftly move on to adding multiplication and division to the lexer.
 
 \begin{center}	
-	\begin{tabular}{lV{322pt}}
+	\begin{tabular}{lV{380pt}}
 		\toprule
 		& \verb|Lexer.lex|\\
 		\midrule
@@ -213,7 +213,7 @@ After creating the test files, we swiftly move on to adding multiplication and d
 In the parser, we add TIMES and DIVIDE to the already created "PLUS MINUS DEQ EQ LTH" token type. They're given a proper precedence order, as well as added to the expression list.
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{330pt}}
 		\toprule
 		File name & Code\\
 		\midrule
@@ -243,7 +243,7 @@ In the parser, we add TIMES and DIVIDE to the already created "PLUS MINUS DEQ EQ
 Moving on to the type checker, we make sure that we can properly check the used types, when doing multiplication and division, adding the cases to the \verb|checkExp| function.
 
 \begin{center}	
-	\begin{tabular}{lV{330pt}}
+	\begin{tabular}{lV{380pt}}
 		\toprule
 		& \verb|TypeChecker.sml|\\
 		\midrule
@@ -271,7 +271,7 @@ Moving on to the type checker, we make sure that we can properly check the used 
 We go ahead and implement them in our interpreter, extending \verb|evalExp| function with the proper cases.
 
 \begin{center}	
-	\begin{tabular}{lV{330pt}}
+	\begin{tabular}{lV{380pt}}
 		\toprule
 		& \verb|Interpreter.sml|\\
 		\midrule
@@ -305,7 +305,7 @@ We go ahead and implement them in our interpreter, extending \verb|evalExp| func
 Finally, cases for multiplication and division are added to the \verb|compileExp| function in the MIPS code generator.
 
 \begin{center}	
-	\begin{tabular}{lV{330pt}}
+	\begin{tabular}{lV{380pt}}
 		\toprule
 		& \verb|CodeGen.sml|\\
 		\midrule
@@ -336,7 +336,7 @@ For the AND and OR implementations, we add them as short-curc
 Moving on to the implementation of the boolean operators, AND and OR, we again start out with creating test files for each of them.\\
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{330pt}}
 		\toprule
 		File name & Code\\
 		\midrule
@@ -400,7 +400,7 @@ Moving on to the implementation of the boolean operators, AND and OR, we again s
 With the test files in place, we can move on to the lexer.
 
 \begin{center}	
-	\begin{tabular}{lV{322pt}}
+	\begin{tabular}{lV{380pt}}
 		\toprule
 		& \verb|Lexer.lex|\\
 		\midrule
@@ -417,7 +417,7 @@ With the test files in place, we can move on to the lexer.
 In the parser, we add AND and OR to the "TRUE FALSE" token type as well as add them to the expression list.
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{330pt}}
 		\toprule
 		File name & Code\\
 		\midrule
@@ -440,7 +440,7 @@ In the parser, we add AND and OR to the "TRUE FALSE" token type as well as add t
 Moving on to the type checker, we make sure that we can properly check the used types, when using AND and OR.
 
 \begin{center}	
-	\begin{tabular}{lV{330pt}}
+	\begin{tabular}{lV{380pt}}
 		\toprule
 		& \verb|TypeChecker.sml|\\
 		\midrule
@@ -477,7 +477,7 @@ Moving on to the type checker, we make sure that we can properly check the used 
 We go ahead and implement them in our interpreter.
 
 \begin{center}	
-	\begin{tabular}{lV{330pt}}
+	\begin{tabular}{lV{380pt}}
 		\toprule
 		& \verb|Interpreter.sml|\\
 		\midrule
@@ -507,7 +507,7 @@ We go ahead and implement them in our interpreter.
 Finally we add the AND and OR to the MIPS code generator.
 
 \begin{center}	
-	\begin{tabular}{lV{325pt}}
+	\begin{tabular}{lV{380pt}}
 		\toprule
 		& \verb|CodeGen.sml|\\
 		\midrule
@@ -552,7 +552,7 @@ Finally we add the AND and OR to the MIPS code generator.
 Lastly for this task, we will implement Not and Negation. We made test files for Not, but for Negate, these are already given to us. When run, the tests are passed.\\
 
 \begin{center}	
-	\begin{tabular}{lV{275pt}}
+	\begin{tabular}{lV{330pt}}
 		\toprule
 		File name & Code\\
 		\midrule
@@ -587,7 +587,7 @@ Lastly for this task, we will implement Not and Negation. We made test files for
 After creating the test files, we move on to the lexer
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{330pt}}
 		\toprule
 		File name & Code\\
 		\midrule
@@ -609,7 +609,7 @@ After creating the test files, we move on to the lexer
 In the parser, we add Not and Negate to the "TRUE FALSE AND OR" token type. We make them non-associative. And lastly, we add the two expressions to the expression list.
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{330pt}}
 		\toprule
 		File name & Code\\
 		\midrule
@@ -639,7 +639,7 @@ In the parser, we add Not and Negate to the "TRUE FALSE AND OR" token type. We m
 Moving on to the type checker, we make sure that we can properly check the used types, when using Not and Negate.
 
 \begin{center}	
-	\begin{tabular}{lV{330pt}}
+	\begin{tabular}{lV{380pt}}
 		\toprule
 		& \verb|TypeChecker.sml|\\
 		\midrule
@@ -667,7 +667,7 @@ Moving on to the type checker, we make sure that we can properly check the used 
 We go ahead and implement them in our interpreter.
 
 \begin{center}	
-	\begin{tabular}{lV{330pt}}
+	\begin{tabular}{lV{380pt}}
 		\toprule
 		& \verb|Interpreter.sml|\\
 		\midrule
@@ -697,7 +697,7 @@ We go ahead and implement them in our interpreter.
 Finally we add the expressions to the MIPS code generator
 
 \begin{center}	
-	\begin{tabular}{lV{330pt}}
+	\begin{tabular}{lV{380pt}}
 		\toprule
 		& \verb|CodeGen.sml|\\
 		\midrule
@@ -723,147 +723,293 @@ Finally we add the expressions to the MIPS code generator
 \end{center}
 
 \subsection{Task 2}
-	This task consists of the compiler implementation of \verb|iota|, \verb|map| and \verb|reduce|. \verb|iota| was quite straight forward, as the hints in task 2 quides you through the whole thing; step-by-step. So we will skip explaining the implementation of \verb|iota| and go straight to map and reduce.
+This task consists of the compiler implementation of \verb|iota|, \verb|map| and \verb|reduce|. \verb|iota| was quite straight forward, as the hints in task 2 quides you through the whole thing; step-by-step. So we will skip explaining the implementation of \verb|iota| and go straight to \verb|map| and \verb|reduce|.
 
-\subsubsection{map}
-	Just like in task one, we need to extend the lexer, parser, type checker, interpreter and the code generator to accept the map operator.
+\subsubsection{map and reduce}
+Just like in task one, we need to extend the lexer, parser, type checker, interpreter and the code generator to accept the \verb|map| and \verb|reduce| operators.
 	
-	(INSERT MAP TESTS HERE)
+Test files for \verb|map| and \verb|reduce| are already given. After their complete implementation, they were run and passed.
 	
-	After creating the test files, we can begin with the top of the compiler structure, which is the lexter.
+We can now begin with the top of the compiler structure, which is the lexer.
 	
-	\begin{center}	
-		\begin{tabular}{lV{322pt}}
-			\toprule
-			& \verb|Lexer.lex|\\
-			\midrule
-			&
-			\begin{verbatim}
-				| "map" => Parser.MAP pos
-			\end{verbatim}
-			\\
-			\bottomrule \\
-		\end{tabular}
-	\end{center}
+\begin{center}	
+	\begin{tabular}{lV{380pt}}
+		\toprule
+		& \verb|Lexer.lex|\\
+		\midrule
+		&
+		\begin{verbatim}
+			| "map" => Parser.MAP pos
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+In the parser, we add MAP to the previously created "IOTA" token type and to the expression list as well.
+
+\begin{center}	
+	\begin{tabular}{lV{330pt}}
+		\toprule
+		File name & Code\\
+		\midrule
+		\command{Parser.grm} &
+		\begin{verbatim}
+		%token <(int*int)> IOTA MAP
+		
+		\end{verbatim}
+		\\
+		\command{Parser.grm} &
+		\begin{verbatim}
+			| MAP LPAR FunArg COMMA Exp RPAR
+			      { Map ($3, $5, (), (), $1) }
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+Moving on to the type checker, we make sure that we can properly check the types that the Map function uses, extending the \verb|checkExp| function with the proper cases.
+
+\begin{center}	
+	\begin{tabular}{lV{380pt}}
+		\toprule
+		& \verb|TypeChecker.sml|\\
+		\midrule
+		&
+		\begin{verbatim}
+			| In.Map (f, arr_exp, _, _, pos)
+			  => let val (fnew, f_returntp, f_argument) =
+			             checkFunArg(f, vtab, ftab, pos)
+			         val arr_exp_tp = checkExp ftab vtab arr_exp
+			         val arr_eltp = case arr_eltp of
+			                          Array t => t
+			                        | _ => Error ("Map: wrong type of 
+			                                       array exp")
+			         val f_argtp  = case f_argument of
+			                          [tp] => tp
+			                        | _ => Error ("Map Wrong argument 
+			                                       fn type ")
+			         in if arr_eltp = f_argtp
+			            then (Array f_returntp, 
+			                        Out.Map (fnew, arr_exp_tp, f_argument, 
+			                                 f_returntp, pos))
+			            else raise Error ("Map: wrong argument type " ^
+			                              ppType e_type, pos)
+			         end
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
 	
-	In the parser, we add MAP to the previously created "IOTA" token type and to the expression list as well.
+Next stop is the interpreter, where we extend the \verb|evalExp| function to be able to interpret the \verb|map| function.
 	
-	\begin{center}	
-		\begin{tabular}{lV{280pt}}
-			\toprule
-			File name & Code\\
-			\midrule
-			\command{Parser.grm} &
-			\begin{verbatim}
-			%token <(int*int)> IOTA MAP
-			
-			\end{verbatim}
-			\\
-			\command{Parser.grm} &
-			\begin{verbatim}
-				| MAP LPAR FunArg COMMA Exp RPAR
-				      { Map ($3, $5, (), (), $1) }
-			\end{verbatim}
-			\\
-			\bottomrule \\
-		\end{tabular}
-	\end{center}
+\begin{center}	
+	\begin{tabular}{lV{380pt}}
+		\toprule
+		& \verb|Interpreter.sml|\\
+		\midrule
+		&
+		\begin{verbatim}
+			| evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) = 
+			      let val ls = evalExp(arrexp, vtab,ftab)
+			      in
+			          map (fn x => let val (result, tp) =
+			                                evalFunArg(farg, vtab, ftab, 
+			                                pos, x)
+			                       in result end ) 
+			          ls
+			      end
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
 	
-	Moving on to the type checker, we make sure that we can properly check the types that the Map function uses, extending the \verb|checkExp| function with the proper cases.
+Finally the \verb|compileExp| function in the MIPS code generator can be extended with the \verb|map| function.
 	
-	\begin{center}	
-		\begin{tabular}{lV{330pt}}
-			\toprule
-			& \verb|TypeChecker.sml|\\
-			\midrule
-			&
-			\begin{verbatim}
-				| In.Map (f, arr_exp, _, _, pos)
-				  => let val (fnew, f_returntp, f_argument) =
-				             checkFunArg(f, vtab, ftab, pos)
-				         val arr_exp_tp = checkExp ftab vtab arr_exp
-				         val arr_eltp = case arr_eltp of
-				                          Array t => t
-				                        | _ => Error ("Map: wrong type of 
-				                                       array exp")
-				         val f_argtp  = case f_argument of
-				                          [tp] => tp
-				                        | _ => Error ("Map Wrong argument 
-				                                       fn type ")
-				         in if arr_eltp = f_argtp
-				            then (Array f_returntp, 
-				                        Out.Map (fnew, arr_exp_tp, f_argument, 
-				                                 f_returntp, pos))
-				            else raise Error ("Map: wrong argument type " ^
-				                              ppType e_type, pos)
-				         end
-			\end{verbatim}
-			\\
-			\bottomrule \\
-		\end{tabular}
-	\end{center}
-	
-	Next stop is the interpreter, where we extend the \verb|evalExp| function to be able to interpret the \verb|map| function.
-	
-	\begin{center}	
-		\begin{tabular}{lV{330pt}}
-			\toprule
-			& \verb|Interpreter.sml|\\
-			\midrule
-			&
-			\begin{verbatim}
-				| evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) = 
-				      let val ls = evalExp(arrexp, vtab,ftab)
-				      in
-				          map (fn x => let val (result, tp) =
-				                                evalFunArg(farg, vtab, ftab, 
-				                                pos, x)
-				                       in result end ) 
-				          ls
-				      end
-			\end{verbatim}
-			\\
-			\bottomrule \\
-		\end{tabular}
-	\end{center}
-	
-	Finally the \verb|compileExp| function in the MIPS code generator can be extended with the \verb|map| function.
-	
-	\begin{center}	
-		\begin{tabular}{lV{330pt}}
-			\toprule
-			& \verb|CodeGen.sml|\\
-			\midrule
-			&
-			\begin{verbatim}
-				  | Map (farg, arg_exp, elem_type, ret_type, pos) => 
-				        let
-				            val res_reg = newName()
-				            val elem_reg = 
-				        in
-				            body
-				        end
-				        
-				        val loop_map0 = case getElemSize elemType of
-				                          One => Mips.LB (res_reg, elem_reg, "0") 
-				                          :: applyfunArg (farg, [res_reg], vtable,
-				                                          res_reg, pos) @ 
-				                          [Mips.Addi(elem_reg, elem_reg, "1")]
-				                        | Four => Mips.LW (res_reg, elem_reg, "0")
-				                          :: applyfunArg (farg, [res_reg], vtable,
-				                                          res_reg, pos) @ 
-				                          [Mips.Addi(elem_reg, elem_reg, "4")]
-			\end{verbatim}
-			\\
-			\bottomrule \\
-		\end{tabular}
-	\end{center}
-	
-\subsubsection{reduce}
+\begin{center}	
+	\begin{tabular}{lV{380pt}}
+		\toprule
+		& \verb|CodeGen.sml|\\
+		\midrule
+		&
+		\begin{verbatim}
+			  | Map (farg, arg_exp, elem_type, ret_type, pos) => 
+			        let
+			            val res_reg = newName()
+			            val elem_reg = 
+			        in
+			            body
+			        end
+			        
+			        val loop_map0 = case getElemSize elemType of
+			                          One => Mips.LB (res_reg, elem_reg, "0") 
+			                          :: applyfunArg (farg, [res_reg], vtable,
+			                                          res_reg, pos) @ 
+			                          [Mips.Addi(elem_reg, elem_reg, "1")]
+			                        | Four => Mips.LW (res_reg, elem_reg, "0")
+			                          :: applyfunArg (farg, [res_reg], vtable,
+			                                          res_reg, pos) @ 
+			                          [Mips.Addi(elem_reg, elem_reg, "4")]
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
 
 \subsection{Task 3}
 
-\section{Results}
+\subsubsection{Copy/constant Propagation}
+
+In this sub-task, we implement code to the \verb|copyConstPropFoldExp| function, which will replace variables with entries in the symbol table with their respective constants.
+
+We have to fill in 5 blanks, but note, that the first two blanks were actually already filled in the given code. For completion, we've included them here.
+
+\begin{center}	
+	\begin{tabular}{lV{350pt}}
+		\toprule
+		Blanks & Code\\
+		\midrule
+		\command{(1)} &
+		\begin{verbatim}
+			Var (name, pos) =>
+			(case SymTab.lookup name vtable of
+			      SOME (VarProp newname) => Var (newname, pos)
+			    | SOME (ConstProp value) => Constant (value, pos)
+			    | _                      => Var (name, pos))
+		
+		\end{verbatim}
+		\\
+		\command{(2)} &
+		\begin{verbatim}
+			| Index (name, e, t, pos) =>
+			  (case SymTab.lookup name vtable of
+			        SOME (VarProp newname) =>
+			          Index (newname, copyConstPropFoldExp vtable e,
+			                 t, pos)
+			      | _ =>
+			          Index (name, copyConstPropFoldExp vtable e,
+			                 t, pos))
+		
+		\end{verbatim}
+		\\
+		\command{(3)} &
+		\begin{verbatim}
+			Var (varname, _) =>
+			let val vtable2 = SymTab.bind name (VarProp varname) vtable
+			    val body2 = copyConstPropFoldExp vtable2 body
+			in 
+			    Let (Dec (name, e', decpos), body2, pos)
+			end
+		
+		\end{verbatim}
+		\\
+		\command{(4)} &
+		\begin{verbatim}
+			| Constant (value, _) =>
+			  let val vtable2 = SymTab.bind name (ConstProp value) vtable
+			      val body2 = copyConstPropFoldExp vtable2 body
+			  in
+			      Let (Dec (name, e', decpos), body2, pos)
+			  end
+		
+		\end{verbatim}
+		\\
+		\command{(5)} &
+		\begin{verbatim}
+			| Let (Dec bindee, inner_body, inner_pos) =>
+			  copyConstPropFoldExp vtable (Let (Dec bindee, 
+			      Let (Dec (name, inner_body, inner_pos), body, pos), pos))
+		
+		\end{verbatim}
+		\\ 
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+\subsubsection{Constant Folding}
+In this sub-task the implement constant folding for \texttt{\{*, /, \&\&, $|\ |$, ==, not\}}. Do note, that in the given code; \texttt{\{/, $|\ |$, ==, not\}} were already implemented. We have included them below for the sake of completion.
+
+\begin{center}	
+	\begin{tabular}{lV{350pt}}
+		\toprule
+		Blanks & Code\\
+		\midrule
+		\command{'*'} &
+		\begin{verbatim}
+			| Times (e1, e2, pos) =>
+			  let val e1' = copyConstPropFoldExp vtable e1
+			      val e2' = copyConstPropFoldExp vtable e2
+			  in case (e1', e2') of
+			          (Constant (IntVal x, _), Constant (IntVal y, _)) =>
+			           Constant (IntVal (x*y), pos)
+			        | (Constant (IntVal 1, _), _) => e2'
+			        | (_, Constant (IntVal 1, _)) => e1'
+			        | _ => Times (e1', e2', pos)
+			  end
+		
+		\end{verbatim}
+		\\
+		\command{'/'} &
+		\begin{verbatim}
+			| Divide (e1, e2, pos) =>
+			  let val e1' = copyConstPropFoldExp vtable e1
+			      val e2' = copyConstPropFoldExp vtable e2
+			  in case (e1', e2') of
+			          (Constant (IntVal x, _), Constant (IntVal y, _)) =>
+			          (Constant (IntVal (Int.quot (x,y)), pos)
+			           handle Div => Divide (e1', e2', pos))
+			        | _ => Divide (e1', e2', pos)
+			  end
+		
+		\end{verbatim}
+		\\
+		\command{'\&\&'} &
+		\begin{verbatim}
+			| And (e1, e2, pos) =>
+			  let val e1' = copyConstPropFoldExp vtable e1
+			      val e2' = copyConstPropFoldExp vtable e2
+			  in case (e1', e2') of
+			          (Constant (BoolVal x, _), Constant (BoolVal y, _)) => 
+			           Constant (BoolVal (x andalso y), pos)
+			        | _ => And (e1', e2', pos) 
+			  end
+
+		\end{verbatim}
+		\\
+		\command{'||'} &
+		\begin{verbatim}
+			| Or (e1, e2, pos) =>
+			  let val e1' = copyConstPropFoldExp vtable e1
+			      val e2' = copyConstPropFoldExp vtable e2
+			  in case (e1', e2') of
+			          (Constant (BoolVal a, _), Constant (BoolVal b, _)) =>
+			           Constant (BoolVal (a orelse b), pos)
+			        | _ => Or (e1', e2', pos)
+			  end
+
+		\end{verbatim}
+		\\
+		\command{'=='} &
+		\begin{verbatim}
+			| Equal (e1, e2, pos) =>
+			  let val e1' = copyConstPropFoldExp vtable e1
+			      val e2' = copyConstPropFoldExp vtable e2
+			  in case (e1', e2') of
+			          (Constant (v1, _), Constant (v2, _)) =>
+			           Constant (BoolVal (v1 = v2), pos)
+			        | _ => if e1' = e2'
+			               then Constant (BoolVal true, pos)
+			               else Equal (e1', e2', pos)
+			  end
+		\end{verbatim}
+		\\ 
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
 \section{Conclusion}
 
 \end{document}

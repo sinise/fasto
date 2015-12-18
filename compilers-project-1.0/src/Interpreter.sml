@@ -280,13 +280,16 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
             | _ => raise Error ("Argument need to be an ArrayVal", pos)
         end
 
-
-(*            
-
-  callFunWithVtable (FunDec (fid, rtp, fargs, body, pdcl), aargs, vtab, ftab, pcall)*)
-
   | evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =
-    raise Fail "Unimplemented feature reduce"
+        let val expresion = evalExp(arrexp, vtab, ftab)
+            val rtp = rtpFunArg(farg, ftab, pos)
+            val f = (fn x => evalFunArg(farg, vtab, ftab, pos, [x]))
+        in
+          case expresion of
+              ArrayVal (ls, tpvar) => ArrayVal (map (f) (ls), rtp)
+            | _ => raise Error ("Argument need to be an ArrayVal", pos)
+        end
+
 
   | evalExp ( Read (t,p), vtab, ftab ) =
         let val str =

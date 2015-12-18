@@ -250,14 +250,19 @@ and checkExp ftab vtab (exp : In.Exp)
       => let val (fnew, f_returntp, f_argument) = checkFunArg(f, vtab, ftab, pos)
              val (e_type, n_exp_dec) = checkExp ftab vtab n_exp
              val (arr_exp_tp, decvar) = checkExp ftab vtab arr_exp
+             val arr_eltp = case arr_exp_tp of
+                                Array t => t
+                              | _ => raise Error ("Reduce: wrong type of array exp" ,pos)
              val f_argtp =  case f_argument of
                                 [tp] => tp
-                              |  _ => Error ("Reduce: Wrong argument fn type ")
-         in if e_type = Int andalso arr_eltp = f_argtp
-            then (Array Int, Out.Iota (n_exp_dec, pos))
+                              |  _ => raise Error ("Reduce: Wrong argument fn type ", pos)
+         in if e_type = f_argtp andalso arr_eltp = f_argtp
+            then (Array f_returntp, Out.Reduce (fnew, n_exp_dec, decvar, Array f_returntp, pos))
             else raise Error ("Reduce: Wrong argument type " ^
                               ppType e_type, pos)
          end
+
+(* Reduce (farg, ne, arrexp, tp, pos), vtab, ftab )*)
 
 and checkFunArg (In.FunName fname, vtab, ftab, pos) =
     (case SymTab.lookup fname ftab of

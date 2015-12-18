@@ -168,22 +168,22 @@ fun evalExp ( Constant (v,_), vtab, ftab ) = v
               (IntVal n1, IntVal n2) => IntVal (n1 div n2)
             | _ => invalidOperands "Division on non-integral args: " [(Int, Int)] res1 res2 pos
         end
-
   | evalExp (And (e1, e2, pos), vtab, ftab) =
         let val res1 = evalExp(e1, vtab, ftab)
-            val res2 = evalExp(e2, vtab, ftab)
-        in  case (res1, res2) of
-              (BoolVal n1, BoolVal n2) => BoolVal (n1 andalso n2)
-            | _ => invalidOperands "OR on non-boolean args: " [(Int, Int)] res1 res2 pos
-        end
+            in  case res1 of
+                  (BoolVal true) => evalExp(e2, vtab, ftab)
+               |  (BoolVal false) => BoolVal false
+               | _ => raise Fail "Arguments to AND is not of type bool"
+            end
 
   | evalExp (Or (e1, e2, pos), vtab, ftab) =
         let val res1 = evalExp(e1, vtab, ftab)
-            val res2 = evalExp(e2, vtab, ftab)
-        in  case (res1, res2) of
-              (BoolVal n1, BoolVal n2) => BoolVal (n1 orelse n2)
-            | _ => invalidOperands "AND on non-boolean args: " [(Int, Int)] res1 res2 pos
-        end
+            in  case res1 of
+                  (BoolVal false) => evalExp(e2, vtab, ftab)
+               |  (BoolVal true) => BoolVal true
+               | _ => raise Fail "Arguments to AND is not of type bool"
+            end
+
 
   | evalExp ( Not(e, pos), vtab, ftab ) =
         let val res = evalExp(e, vtab, ftab)

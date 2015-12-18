@@ -52,16 +52,23 @@ fun copyConstPropFoldExp vtable e =
                in Let (Dec (name, e', decpos), body', pos)
                end
         end 
-      | Times (e1, e2, pos) =>
+      | Times (e1, e2, pos) =>                                                    (*moded*)
         let val e1' = copyConstPropFoldExp vtable e1
             val e2' = copyConstPropFoldExp vtable e2
-        in Times (e1', e2', pos) (* Do something here. *)
+        in case (e1', e2') of
+               (Constant (IntVal x, _), Constant (IntVal y, _)) => Constant (IntVal (x*y), pos)
+             | (Constant (IntVal 1, _), _) => e2'
+             | (_, Constant (IntVal 1, _)) => e1'
+             | _ => Times (e1', e2', pos)
         end
-      | And (e1, e2, pos) =>
+      | And (e1, e2, pos) =>                                                      (*moded*)
         let val e1' = copyConstPropFoldExp vtable e1
             val e2' = copyConstPropFoldExp vtable e2
-        in And (e1', e2', pos) (* Do something here. *)
+        in case (e1', e2') of
+               (Constant (BoolVal x, _), Constant (BoolVal y, _)) => Constant (BoolVal (x andalso y))
+             | _ => And (e1', e2', pos) 
         end
+
       | Constant x => Constant x
       | StringLit x => StringLit x
       | ArrayLit (es, t, pos) =>

@@ -246,6 +246,7 @@ and checkExp ftab vtab (exp : In.Exp)
              else raise Error ("Map: wrong argument type ", pos)
          end
 
+
     | In.Reduce (f, n_exp, arr_exp, _, pos)
       => raise Fail "Unimplemented feature reduce"
 
@@ -314,3 +315,4 @@ fun checkProg funDecs =
               " (should be () -> <anything>)", mainpos)
     end
 end
+

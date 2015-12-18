@@ -248,6 +248,7 @@ and checkExp ftab vtab (exp : In.Exp)
                               ppType e_type, pos)
          end
 
+
     | In.Reduce (f, n_exp, arr_exp, _, pos)
       => let val (fnew, f_returntp, f_argument) = checkFunArg(f, vtab, ftab, pos)
              val (e_type, n_exp_dec) = checkExp ftab vtab n_exp
@@ -326,3 +327,4 @@ fun checkProg funDecs =
               " (should be () -> <anything>)", mainpos)
     end
 end
+

@@ -1,4 +1,13 @@
-\documentclass[]{article}
+\documentclass[a4paper]{article}
+
+\usepackage{geometry}
+\geometry{
+	a4paper,
+	total={170mm,257mm},
+	left=20mm,
+	top=20mm,
+}
+
 \usepackage{parskip} %Removes paragraph line indents
 \usepackage{tabu}
 \usepackage{microtype}
@@ -16,7 +25,7 @@
 %opening
 \title{Group Assignment\\ \ \\Compilers\\ \ \\}
 \author{Oliver Mikkel Winther Cristensen (klw741) \\ \ \\Mathias Brøndum Leroul (swn848)\\ \ \\Sebastian O. Jensen (gjx653)\\ \ \\}
-\date{Turn-in date: 18-12-2015}
+\date{Turn-in date: 20-12-2015}
 
 \begin{document}
 
@@ -26,44 +35,17 @@
 \tableofcontents
 \newpage
 
-\textbf{Contents of the Report}\\
-It is largely up to you to decide what you think is important to include in the report, as long as
-the following requirements are met:
-Your report should justify all your changes to the compiler modules, in particular, the lexer,
-parser, interpreter, type checker, machine-code generator, and the optimization modules. All
-major design decisions should be presented and justified.
-When evaluating your work, the main focus will be on verifying that your implementation
-of the language is correct. While we do not put particular emphasis on compiler optimizations
-in this course, we will also evaluate the quality of the generated code: if there are obvious
-inefficiencies that could have been easily solved you will be penalized, as they testify either
-wrong priorities or lack of understanding.
-You should not include the whole compiler in your report, but you must include the parts
-that were either added, i.e. new code, or substantially modified. Add them as code listings, and
-use the appendix if they get too big. Ideally, we should not need to read your source code.
-Your report should describe whether the compilation and execution of your input/test (FASTO)
-programs results in the correct/expected behavior. If it does not, try to explain why this is. In
-addition, (i) it must be assessed to what extent the delivered test programs cover the language
-features, and (ii) if the implementation deviates from the correct/expected behavior than the test
-program(s) should illustrate the implementation shortcomings to your best extent.
-Known shortcomings in type checking and machine-code generation must be described, and,
-whenever possible, you need to make suggestions on how these might be corrected.
-The report should not exceed this document in size, and should have an appropriate level of
-detail. You might be penalized if your report includes too many irrelevant details.
-
 \section{Introduction}
-	We're given the grand task of 
+	We have been given the grand task of creating a small compiler, using the high level languages Fasto and SML as well as the low level machine language MIPS. Throughout this paper, we will document every code addition we make and if nothing is stated about the success of the code, it means that the code returns the expected output.
+	
 \section{Implementation}
-	Each implementation step is presented in the order, which the the code is passed through: Lexer $\rightarrow$ Parser $\rightarrow$ Interpreter $\rightarrow$ Type Checker $\rightarrow$ MIPS Code Generator
+	Each implementation step is presented in the same order as the compiler structure: Lexer $\rightarrow$ Parser $\rightarrow$ Type Checker $\rightarrow$ Interpreter $\vee$ MIPS Code Generator
+\subsection{Task 1}
+	Task 1 is the implementation of True/False, multiplication/division, AND/OR and finally Not/Negation. This task was probably the longest to do, because of the many different components, as well as the fact that we had to learn the rhythm of the coding process.
 	
-	\subsection*{Notes}
-		\begin{itemize}
-			\item Implemented Boolean Litterals: true and false.
-			\subitem Added test files bool.fo, bool.in, bool.out
-		\end{itemize}
-	
-\subsection{True/False}
+\subsubsection{True and False}
 
-	In the first task, we're given the sub-task to implement the boolean operators True and False. We start out by creating the following test files:\\
+	To begin with, we're given the sub-task to implement the boolean literals True and False. We start out by creating the following test files:
 	
 \begin{center}	
 	\begin{tabular}{lV{280pt}}
@@ -96,8 +78,24 @@ detail. You might be penalized if your report includes too many irrelevant detai
 	\end{tabular}
 \end{center}
 
+Starting at the top of the compiler structure, the lexer is upgraded with the proper true and false keywords
 
-Then we implement the True/False token in our parser as well as add True and False to the expression list\\
+\begin{center}	
+	\begin{tabular}{lV{322pt}}
+		\toprule
+		& \verb|Lexer.lex|\\
+		\midrule
+		&
+		\begin{verbatim}
+			| "true"  => Parser.TRUE  pos
+			| "false" => Parser.FALSE pos
+		\end{verbatim}
+		\\
+		\bottomrule \\
+	\end{tabular}
+\end{center}
+
+Then we implement the True/False token type in our parser as well as add True and False to the expression list.
 
 \begin{center}	
 	\begin{tabular}{lV{275pt}}
@@ -112,7 +110,7 @@ Then we implement the True/False token in our parser as well as add True and Fal
 		\\
 		\command{Parser.grm} &
 		\begin{verbatim}
-			| TRUE           { Constant (BoolVal true, $1)}
+			| TRUE           { Constant (BoolVal true,  $1)}
 			| FALSE          { Constant (BoolVal false, $1)}
 		\end{verbatim}
 		\\
@@ -120,7 +118,7 @@ Then we implement the True/False token in our parser as well as add True and Fal
 	\end{tabular}
 \end{center}
 
-And finally we add the boolean constants to our MIPS code generator\\
+And finally we add the boolean constants to our MIPS code generator.
 
 \begin{center}	
 	\begin{tabular}{lV{325pt}}
@@ -140,8 +138,8 @@ And finally we add the boolean constants to our MIPS code generator\\
 	\end{tabular}
 \end{center}
 
-\subsection{Multiplication and Division}
-Moving on to the implementation of multiplication and division, we again start out with creating test files.\\
+\subsubsection{Multiplication and Division}
+Moving on to the implementation of multiplication and division, we again start out with creating test files for each of the two operators.
 
 \begin{center}	
 	\begin{tabular}{lV{280pt}}
@@ -195,7 +193,7 @@ Moving on to the implementation of multiplication and division, we again start o
 	\end{tabular}
 \end{center}
 
-After creating the test files, we swiftly move on to the lexer
+After creating the test files, we swiftly move on to adding multiplication and division to the lexer.
 
 \begin{center}	
 	\begin{tabular}{lV{322pt}}
@@ -212,7 +210,7 @@ After creating the test files, we swiftly move on to the lexer
 	\end{tabular}
 \end{center}
 
-In the parser, we add TIMES and DIVIDE to the already created "PLUS MINUS DEQ EQ LTH" token. They're given a proper precedence order as well as added to the expression list.
+In the parser, we add TIMES and DIVIDE to the already created "PLUS MINUS DEQ EQ LTH" token type. They're given a proper precedence order, as well as added to the expression list.
 
 \begin{center}	
 	\begin{tabular}{lV{280pt}}
@@ -234,16 +232,15 @@ In the parser, we add TIMES and DIVIDE to the already created "PLUS MINUS DEQ EQ
 		\\
 		\command{Parser.grm} &
 		\begin{verbatim}
-			Exp :
-			        | Exp DIVIDE Exp { Divide ($1, $3, $2) }
-			        | Exp TIMES Exp  { Times ($1, $3, $2) }
+			| Exp DIVIDE Exp { Divide ($1, $3, $2) }
+			| Exp TIMES Exp  { Times  ($1, $3, $2) }
 		\end{verbatim}
 		\\
 		\bottomrule \\
 	\end{tabular}
 \end{center}
 
-Moving on to the type checker, we make sure that we can properly check the used types, when doing multiplication and division
+Moving on to the type checker, we make sure that we can properly check the used types, when doing multiplication and division, adding the cases to the \verb|checkExp| function.
 
 \begin{center}	
 	\begin{tabular}{lV{330pt}}
@@ -252,11 +249,6 @@ Moving on to the type checker, we make sure that we can properly check the used 
 		\midrule
 		&
 		\begin{verbatim}
-		and checkExp ftab vtab (exp : In.Exp)
-		  = case exp of
-		    .
-		    .
-		    .
 		    | In.Times (e1, e2, pos)
 		      => let val (_, e1_dec, e2_dec) =
 			             checkBinOp ftab vtab (pos, Int, e1, e2)
@@ -276,7 +268,7 @@ Moving on to the type checker, we make sure that we can properly check the used 
 	\end{tabular}
 \end{center}
 
-We go ahead and implement them in our interpreter
+We go ahead and implement them in our interpreter, extending \verb|evalExp| function with the proper cases.
 
 \begin{center}	
 	\begin{tabular}{lV{330pt}}
@@ -310,7 +302,7 @@ We go ahead and implement them in our interpreter
 	\end{tabular}
 \end{center}
 
-Finally they're added to the MIPS code generator
+Finally, cases for multiplication and division are added to the \verb|compileExp| function in the MIPS code generator.
 
 \begin{center}	
 	\begin{tabular}{lV{330pt}}
@@ -319,33 +311,29 @@ Finally they're added to the MIPS code generator
 		\midrule
 		&
 		\begin{verbatim}
-			fun compileExp e vtable place =
-			    case e of
-			    .
-			    .
-			    .
-			    | Divide (e1, e2, pos) =>
-			        let val t1 = newName "divide_L"
-			            val t2 = newName "divide_R"
-			            val code1 = compileExp e1 vtable t1
-			            val code2 = compileExp e2 vtable t2
-			        in code1 @ code2 @ [Mips.DIV (place,t1,t2)]
-			        end
-			    | Times (e1, e2, pos) =>
-			        let val t1 = newName "times_L"
-			            val t2 = newName "times_R"
-			            val code1 = compileExp e1 vtable t1
-			            val code2 = compileExp e2 vtable t2
-			        in code1 @ code2 @ [Mips.MUL (place,t1,t2)]
-			        end
+			| Divide (e1, e2, pos) =>
+			    let val t1 = newName "divide_L"
+			        val t2 = newName "divide_R"
+			        val code1 = compileExp e1 vtable t1
+			        val code2 = compileExp e2 vtable t2
+			    in code1 @ code2 @ [Mips.DIV (place,t1,t2)]
+			    end
+			| Times (e1, e2, pos) =>
+			    let val t1 = newName "times_L"
+			        val t2 = newName "times_R"
+			        val code1 = compileExp e1 vtable t1
+			        val code2 = compileExp e2 vtable t2
+			    in code1 @ code2 @ [Mips.MUL (place,t1,t2)]
+			    end
 		\end{verbatim}
 		\\
 		\bottomrule \\
 	\end{tabular}
 \end{center}
 
-\subsection{AND and OR}
-Moving on to the implementation of the boolean literals, AND and OR, we again start out with creating test files.\\
+\subsubsection{AND and OR}
+For the AND and OR implementations, we add them as short-curc
+Moving on to the implementation of the boolean operators, AND and OR, we again start out with creating test files for each of them.\\
 
 \begin{center}	
 	\begin{tabular}{lV{280pt}}
@@ -409,7 +397,7 @@ Moving on to the implementation of the boolean literals, AND and OR, we again st
 	\end{tabular}
 \end{center}
 
-After creating the test files, we swiftly move on to the lexer
+With the test files in place, we can move on to the lexer.
 
 \begin{center}	
 	\begin{tabular}{lV{322pt}}
@@ -426,7 +414,7 @@ After creating the test files, we swiftly move on to the lexer
 	\end{tabular}
 \end{center}
 
-In the parser, we add AND and OR to the "TRUE FALSE" token as well as added to the expression list.
+In the parser, we add AND and OR to the "TRUE FALSE" token type as well as add them to the expression list.
 
 \begin{center}	
 	\begin{tabular}{lV{280pt}}
@@ -441,16 +429,15 @@ In the parser, we add AND and OR to the "TRUE FALSE" token as well as added to t
 		\\
 		\command{Parser.grm} &
 		\begin{verbatim}
-		Exp :
-		        | Exp AND Exp { And ($1, $3, $2) }
-		        | Exp OR  Exp { Or  ($1, $3, $2) }
+			| Exp AND Exp { And ($1, $3, $2) }
+			| Exp OR  Exp { Or  ($1, $3, $2) }
 		\end{verbatim}
 		\\
 		\bottomrule \\
 	\end{tabular}
 \end{center}
 
-Moving on to the type checker, we make sure that we can properly check the used types, when using the boolean literals AND and OR
+Moving on to the type checker, we make sure that we can properly check the used types, when using AND and OR.
 
 \begin{center}	
 	\begin{tabular}{lV{330pt}}
@@ -487,7 +474,7 @@ Moving on to the type checker, we make sure that we can properly check the used 
 	\end{tabular}
 \end{center}
 
-We go ahead and implement them in our interpreter
+We go ahead and implement them in our interpreter.
 
 \begin{center}	
 	\begin{tabular}{lV{330pt}}
@@ -498,20 +485,18 @@ We go ahead and implement them in our interpreter
 		\begin{verbatim}
 			| evalExp (And (e1, e2, pos), vtab, ftab) =
 			      let val res1 = evalExp(e1, vtab, ftab)
-			          val res2 = evalExp(e2, vtab, ftab)
-			      in  case (res1, res2) of
-			            (BoolVal n1, BoolVal n2) => BoolVal (n1 andalso n2)
-			          | _ => invalidOperands "OR on non-boolean args: "
-			                 [(Int, Int)] res1 res2 pos
+			      in  case res1 of
+			            (BoolVal true) => evalExp(e2, vtab, ftab)
+			          | (BoolVal false) => BoolVal false
+			          | _ => raise Fail "Arguments to AND is not of type bool"
 			      end
 			  
 			| evalExp (Or (e1, e2, pos), vtab, ftab) =
 			      let val res1 = evalExp(e1, vtab, ftab)
-			          val res2 = evalExp(e2, vtab, ftab)
-			      in  case (res1, res2) of
-			            (BoolVal n1, BoolVal n2) => BoolVal (n1 orelse n2)
-			          | _ => invalidOperands "AND on non-boolean args: "
-			                 [(Int, Int)] res1 res2 pos
+			      in  case res1 of
+			            (BoolVal false) => evalExp(e2, vtab, ftab)
+			          | (BoolVal true)  => BoolVal true
+			          | _ => raise Fail "Arguments to AND is not of type bool"
 			      end
 		\end{verbatim}
 		\\
@@ -519,10 +504,10 @@ We go ahead and implement them in our interpreter
 	\end{tabular}
 \end{center}
 
-Finally we add thr short-circuit AND and OR to the MIPS code generator
+Finally we add the AND and OR to the MIPS code generator.
 
 \begin{center}	
-	\begin{tabular}{lV{280pt}}
+	\begin{tabular}{lV{325pt}}
 		\toprule
 		& \verb|CodeGen.sml|\\
 		\midrule
@@ -563,8 +548,8 @@ Finally we add thr short-circuit AND and OR to the MIPS code generator
 	\end{tabular}
 \end{center}
 
-\subsection{Not and Negation}
-Lastly for this task, we will implement Not and Negation. We will, once again, start out with creating test files.\\
+\subsubsection{Not and Negation}
+Lastly for this task, we will implement Not and Negation. We made test files for Not, but for Negate, these are already given to us. When run, the tests are passed.\\
 
 \begin{center}	
 	\begin{tabular}{lV{275pt}}
@@ -593,38 +578,6 @@ Lastly for this task, we will implement Not and Negation. We will, once again, s
 		\command{not.out} &
 		\begin{verbatim}
 			falsetrue
-		
-		\end{verbatim}
-		\\
-		\command{negate.fo} &
-		\begin{verbatim}
-			fun bool write_nl(bool b) =
-			    let res = write(b) in
-			    let tmp = write("\n") in
-			    res
-			
-			fun bool main() =
-			    let x0 = write_nl(3 / 2 == 1) in
-			    let x1 = write_nl(~3 / 2 == ~2) in
-			    let x2 = write_nl(3 /~2 == ~2) in
-			    let x3 = write_nl(~3 /~2 == 1) in
-			    write_nl(x0 && x1 && x2 && x3)
-		
-		\end{verbatim}
-		\\
-		\command{negate.in} &
-		\begin{verbatim}
-		
-		
-		\end{verbatim}
-		\\
-		\command{negate.out} &
-		\begin{verbatim}
-			true
-			false
-			false
-			true
-			false
 		\end{verbatim}
 		\\
 		\bottomrule \\
@@ -653,7 +606,7 @@ After creating the test files, we move on to the lexer
 	\end{tabular}
 \end{center}
 
-In the parser, we add Not and Negate to the "TRUE FALSE AND OR" token. We also include them in \verb|%nonassoc ifprec letprec| making sure, they are nonassiciative. And lastly, we add the expressions to the expressionlist.
+In the parser, we add Not and Negate to the "TRUE FALSE AND OR" token type. We make them non-associative. And lastly, we add the two expressions to the expression list.
 
 \begin{center}	
 	\begin{tabular}{lV{280pt}}
@@ -675,9 +628,8 @@ In the parser, we add Not and Negate to the "TRUE FALSE AND OR" token. We also i
 		\\
 		\command{Parser.grm} &
 		\begin{verbatim}
-			Exp :
-			        | NOT Exp    { NOT    ($2, $1) }
-			        | NEGATE Exp { NEGATE ($2, $1) }
+			| NOT Exp    { NOT    ($2, $1) }
+			| NEGATE Exp { NEGATE ($2, $1) }
 		\end{verbatim}
 		\\
 		\bottomrule \\
@@ -769,6 +721,145 @@ Finally we add the expressions to the MIPS code generator
 		\bottomrule \\
 	\end{tabular}
 \end{center}
+
+\subsection{Task 2}
+	This task consists of the compiler implementation of \verb|iota|, \verb|map| and \verb|reduce|. \verb|iota| was quite straight forward, as the hints in task 2 quides you through the whole thing; step-by-step. So we will skip explaining the implementation of \verb|iota| and go straight to map and reduce.
+
+\subsubsection{map}
+	Just like in task one, we need to extend the lexer, parser, type checker, interpreter and the code generator to accept the map operator.
+	
+	(INSERT MAP TESTS HERE)
+	
+	After creating the test files, we can begin with the top of the compiler structure, which is the lexter.
+	
+	\begin{center}	
+		\begin{tabular}{lV{322pt}}
+			\toprule
+			& \verb|Lexer.lex|\\
+			\midrule
+			&
+			\begin{verbatim}
+				| "map" => Parser.MAP pos
+			\end{verbatim}
+			\\
+			\bottomrule \\
+		\end{tabular}
+	\end{center}
+	
+	In the parser, we add MAP to the previously created "IOTA" token type and to the expression list as well.
+	
+	\begin{center}	
+		\begin{tabular}{lV{280pt}}
+			\toprule
+			File name & Code\\
+			\midrule
+			\command{Parser.grm} &
+			\begin{verbatim}
+			%token <(int*int)> IOTA MAP
+			
+			\end{verbatim}
+			\\
+			\command{Parser.grm} &
+			\begin{verbatim}
+				| MAP LPAR FunArg COMMA Exp RPAR
+				      { Map ($3, $5, (), (), $1) }
+			\end{verbatim}
+			\\
+			\bottomrule \\
+		\end{tabular}
+	\end{center}
+	
+	Moving on to the type checker, we make sure that we can properly check the types that the Map function uses, extending the \verb|checkExp| function with the proper cases.
+	
+	\begin{center}	
+		\begin{tabular}{lV{330pt}}
+			\toprule
+			& \verb|TypeChecker.sml|\\
+			\midrule
+			&
+			\begin{verbatim}
+				| In.Map (f, arr_exp, _, _, pos)
+				  => let val (fnew, f_returntp, f_argument) =
+				             checkFunArg(f, vtab, ftab, pos)
+				         val arr_exp_tp = checkExp ftab vtab arr_exp
+				         val arr_eltp = case arr_eltp of
+				                          Array t => t
+				                        | _ => Error ("Map: wrong type of 
+				                                       array exp")
+				         val f_argtp  = case f_argument of
+				                          [tp] => tp
+				                        | _ => Error ("Map Wrong argument 
+				                                       fn type ")
+				         in if arr_eltp = f_argtp
+				            then (Array f_returntp, 
+				                        Out.Map (fnew, arr_exp_tp, f_argument, 
+				                                 f_returntp, pos))
+				            else raise Error ("Map: wrong argument type " ^
+				                              ppType e_type, pos)
+				         end
+			\end{verbatim}
+			\\
+			\bottomrule \\
+		\end{tabular}
+	\end{center}
+	
+	Next stop is the interpreter, where we extend the \verb|evalExp| function to be able to interpret the \verb|map| function.
+	
+	\begin{center}	
+		\begin{tabular}{lV{330pt}}
+			\toprule
+			& \verb|Interpreter.sml|\\
+			\midrule
+			&
+			\begin{verbatim}
+				| evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) = 
+				      let val ls = evalExp(arrexp, vtab,ftab)
+				      in
+				          map (fn x => let val (result, tp) =
+				                                evalFunArg(farg, vtab, ftab, 
+				                                pos, x)
+				                       in result end ) 
+				          ls
+				      end
+			\end{verbatim}
+			\\
+			\bottomrule \\
+		\end{tabular}
+	\end{center}
+	
+	Finally the \verb|compileExp| function in the MIPS code generator can be extended with the \verb|map| function.
+	
+	\begin{center}	
+		\begin{tabular}{lV{330pt}}
+			\toprule
+			& \verb|CodeGen.sml|\\
+			\midrule
+			&
+			\begin{verbatim}
+				  | Map (farg, arg_exp, elem_type, ret_type, pos) => 
+				        let
+				            val res_reg = newName()
+				            val elem_reg = 
+				        in
+				            body
+				        end
+				        
+				        val loop_map0 = case getElemSize elemType of
+				                          One => Mips.LB (res_reg, elem_reg, "0") 
+				                          :: applyfunArg (farg, [res_reg], vtable,
+				                                          res_reg, pos) @ 
+				                          [Mips.Addi(elem_reg, elem_reg, "1")]
+				                        | Four => Mips.LW (res_reg, elem_reg, "0")
+				                          :: applyfunArg (farg, [res_reg], vtable,
+				                                          res_reg, pos) @ 
+				                          [Mips.Addi(elem_reg, elem_reg, "4")]
+			\end{verbatim}
+			\\
+			\bottomrule \\
+		\end{tabular}
+	\end{center}
+	
+\subsubsection{reduce}
 
 \section{Results}
 \section{Conclusion}

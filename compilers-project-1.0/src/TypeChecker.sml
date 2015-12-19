@@ -242,7 +242,7 @@ and checkExp ftab vtab (exp : In.Exp)
                                [tp] => tp
                               |  _ => raise Error ("Map Wrong argument fn type ", pos)
          in  if arr_eltp = f_argtp
-             then (Array f_returntp, Out.Map (fnew, decvar, arr_eltp, Array f_returntp, pos))
+             then (Array f_returntp, Out.Map (fnew, decvar, arr_eltp, f_returntp, pos))
              else raise Error ("Map: wrong argument type ", pos)
          end
 
@@ -254,10 +254,10 @@ and checkExp ftab vtab (exp : In.Exp)
                                   Array t => t
                                 | _ => raise Error ("Reduce: wrong type of array exp" ,pos)
                val f_argtp =  case f_argument of
-                                  fa::fas => fa
+                                  fa::fas => fa(*more*)
                                 |  _ => raise Error ("Reduce: Wrong argument fn type ", pos)
            in if e_type = f_argtp andalso arr_eltp = f_argtp
-              then (Array f_returntp, Out.Reduce (fnew, n_exp_dec, decvar, Array f_returntp, pos))
+              then (f_returntp, Out.Reduce (fnew, n_exp_dec, decvar, f_returntp, pos))
               else raise Error ("Reduce: Wrong argument type " ^
                                 ppType e_type, pos)
            end

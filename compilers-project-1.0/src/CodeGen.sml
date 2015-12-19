@@ -362,8 +362,8 @@ fun compileExp e vtable place =
   (* Comparison checking, later similar code for And and Or. *)
   
   | Equal (e1, e2, pos) =>
-      let val t1 = newName "eq_Lllllllllll"
-          val t2 = newName "eq_Rrrrrrrrrrrr"
+      let val t1 = newName "eq_L"
+          val t2 = newName "eq_R"
           val code1 = compileExp e1 vtable t1
           val code2 = compileExp e2 vtable t2
           val falseLabel = newName "false"
@@ -472,68 +472,103 @@ fun compileExp e vtable place =
       end
 
   | Map (farg, arr_exp, elem_type, ret_type, pos) => 
-         let val size_reg = newName "size_reg"
-             val elem_reg = newName "elem_reg"
-
-             val arr_reg = newName "arr_reg"
+         let val arr_reg = newName "arr_reg"
+             val len_reg = newName "len_reg"
+             val res_reg = newName "res_reg"
+             val i_reg   = newName "i_reg"
+             val tmp_reg = newName "tmp_reg"
              
              val loop_beg = newName "loop_beg"
              val loop_end = newName "loop_end"
-             val tmp_reg = newName "tmp_reg"
 
-             val res_reg = newName "res_reg"
-             val addr_reg = newName "addr_reg"
-             val i_reg = newName "i_reg"
+             val code1 = compileExp arr_exp vtable arr_reg
+             val code2 = [Mips.LW (len_reg, arr_reg, "0")]
              
-
-             val code1 = compileExp arr_exp vtable size_reg
-             val code2 = [Mips.LI (elem_reg, "0")]
-
-             val init_regs = [ Mips.ADDI (addr_reg, place, "4")
-                          , Mips.MOVE (i_reg, "0") 
-                          , Mips.ADDI (elem_reg, arr_reg, "4") ]
+             val init_regs = [ Mips.ADDI (arr_reg, arr_reg, "4")
+                             , Mips.ADDI (res_reg, place, "4") 
+                             , Mips.MOVE (i_reg, "0") ]
 
              val loop_header = [ Mips.LABEL (loop_beg)
-                            , Mips.SUB (tmp_reg, i_reg, size_reg)
-                            , Mips.BGEZ (tmp_reg, loop_end) ]
+                               , Mips.SUB (tmp_reg, i_reg, len_reg)
+                               , Mips.BGEZ (tmp_reg, loop_end) ]
 
-             val loop_map0 = case getElemSize elemType of
-                    One => Mips.LB (tmp_reg, elem_reg, "0") ::
-                           applyfunArg (farg, [tmp_reg], vtable, tmp_reg, pos) @ 
-                           [Mips.Addi(elem_reg, elem_reg, "1")]
-                  | Four => Mips.LW (tmp_reg, elem_reg, "0") ::
-                           applyfunArg (farg, [tmp_reg], vtable, tmp_reg, pos) @ 
-                           [Mips.Addi(elem_reg, elem_reg, "4")]
+             val loop_map_load = case getElemSize elem_type of
+                    One => Mips.LB (tmp_reg, arr_reg, "0") ::
+                           applyFunArg (farg, [tmp_reg], vtable, tmp_reg, pos) @ 
+                           [Mips.ADDI(arr_reg, arr_reg, "1")]
+                  | Four => Mips.LW (tmp_reg, arr_reg, "0") ::
+                           applyFunArg (farg, [tmp_reg], vtable, tmp_reg, pos) @ 
+                           [Mips.ADDI(arr_reg, arr_reg, "4")]
 
-                val loop_map_store = case getElemSize elem_type of
-                          One => [Mips.SB (tmp_reg, res_reg, "0")
-                                , Mips.ADDI(res_reg, res_reg, "1")]
+             val loop_map_store = case getElemSize ret_type of
+                                      One  => [ Mips.SB (tmp_reg, res_reg, "0")
+                                              , Mips.ADDI(res_reg, res_reg, "1")]
+                                    | Four => [ Mips.SB (tmp_reg, res_reg, "0")
+                                              , Mips.ADDI(res_reg, res_reg, "4")]
 
-                         | Four => [Mips.SB (tmp_reg, res_reg, "0")
-                                 , Mips.ADDI(res_reg, res_reg, "4")]
-
-             val loop_footer = [ Mips.ADDI (addr_reg, addr_reg, "4")
-                            , Mips.ADDI (i_reg, i_reg, "1")
-                            , Mips.J loop_beg
-                            , Mips.LABEL loop_end
-                            ]
+             val loop_footer = [ Mips.ADDI (i_reg, i_reg, "1")
+                               , Mips.J loop_beg
+                               , Mips.LABEL loop_end ]
 
 
 
 
-            in code1
-               @ dynalloc (size_reg, place, ret_type)
-               @ code2
-               @ init_regs
-               @ loop_header
-               @ loop_map0
-               @ loop_map_store
-               @ loop_footer
+            in   code1                                        
+               @ code2                                        
+               @ dynalloc (len_reg, place, ret_type)          
+               @ init_regs                                    
+               @ loop_header                                  
+               @ loop_map_load                                
+               @ loop_map_store                               
+               @ loop_footer                                  
             end
 
   (* reduce(f, acc, {x1, x2, ...}) = f(..., f(x2, f(x1, acc))) *)
-  | Reduce (binop, acc_exp, arr_exp, tp, pos) =>
-    raise Fail "Unimplemented feature reduce"
+  | Reduce (binop, ne_exp, arr_exp, tp, pos) => 
+          let
+            val ne_reg = newName "ne_reg"
+            val arr_reg = newName "arr_reg"
+            val len_reg = newName "len_reg"
+            val res_reg = newName "res_reg"
+            val i_reg   = newName "i_reg"
+            val tmp_reg = newName "tmp_reg"
+         
+            val loop_beg = newName "loop_beg"
+            val loop_end = newName "loop_end"
+
+            val ne_code = compileExp ne_exp vtable ne_reg
+            val arr_code = compileExp arr_exp vtable arr_reg
+            val len_code = [Mips.LW (len_reg, arr_reg, "0")]
+
+            val init_regs = [ Mips.ADDI (arr_reg, arr_reg, "4")
+                            , Mips.MOVE (i_reg, "0")
+                            , Mips.MOVE (place, ne_reg) ]
+
+            val loop_header = [ Mips.LABEL (loop_beg)
+                              , Mips.SUB (tmp_reg, i_reg, len_reg)
+                              , Mips.BGEZ (tmp_reg, loop_end) ]
+
+            val loop_reduce = case getElemSize tp of
+                   One => Mips.LB (tmp_reg, arr_reg, "0") ::
+                          applyFunArg (binop, [place, tmp_reg], vtable, place, pos) @ 
+                          [Mips.ADDI(arr_reg, arr_reg, "1")]
+                 | Four => Mips.LW (tmp_reg, arr_reg, "0") ::
+                          applyFunArg (binop, [place, tmp_reg], vtable, place, pos) @ 
+                          [Mips.ADDI(arr_reg, arr_reg, "4")]
+            
+            val loop_footer = [ Mips.ADDI (i_reg, i_reg, "1")
+                              , Mips.J loop_beg
+                              , Mips.LABEL loop_end ]
+
+          in
+                 ne_code
+               @ arr_code                              
+               @ len_code
+               @ init_regs                          
+               @ loop_header                        
+               @ loop_reduce                      
+               @ loop_footer                        
+          end
 
     | And (e1, e2, pos) =>                                             (*moded*)
       let val t1 = newName "and_L"
@@ -603,7 +638,6 @@ and applyFunArg(FunName s, args, vtable, place, pos): Mips.Prog =
         in 
             applyRegs (s, args, tmp, pos) @ [Mips.MOVE(place, tmp)] 
         end
-
   | applyFunArg(Lambda (_, params, body, epos), args, vtable, place, pos) =
         let fun bindParams (Param (pname,_)::params') (arg::args') vtable' = 
                 bindParams params' args' (SymTab.bind pname arg vtable')

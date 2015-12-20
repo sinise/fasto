@@ -1,0 +1,7 @@
+fun bool notFun(bool t) = not t
+
+fun bool main() =
+  let a = read(bool) in
+  let b = read(bool) in
+  let c = write(notFun(a)) in
+  write(notFun(b))

@@ -1,0 +1,9 @@
+fun bool orTest(bool a, bool b) = a || b
+
+fun bool main() =
+  let a = read(bool) in
+  let b = read(bool) in
+  let c = write(orTest(b,b)) in
+  let d = write(orTest(a,a)) in
+  let e = write(orTest(a,b)) in
+  write(orTest(b,a))

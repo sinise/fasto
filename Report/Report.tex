@@ -871,7 +871,7 @@ Finally the \verb|compileExp| function in the MIPS code generator can be extende
 
 \subsubsection{Copy/Constant Propagation}
 
-In this sub-task, we add code to the \texttt{copyConstPropFoldExp} function, which will produce optimized expression when this is possible. First part is to take care of optimizing \texttt{let} expressions recursively and the second part is to replace expressions with reduced expression when this is possible.
+In this sub-task, we add code to the \texttt{copyConstPropFoldExp} function, which will produce optimized expression when this is possible. First part is to take care of optimizing \texttt{let} expressions recursively and the second part is to replace expressions with \texttt{reduce} expression when this is possible.
 E.g. \texttt{a*1} will always return \texttt{a} and hence we replace the expression with \texttt{a}. It's important to note that \texttt{a*0} can not be replaced with \texttt{0} as the expression has side effects.
 
 We have to fill in 5 blanks, but note, that the first two blanks were actually already filled in the given code. For completion, we've included them here.

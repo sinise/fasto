@@ -8,6 +8,7 @@
 	top=20mm,
 }
 
+\usepackage[titletoc,toc,title]{appendix}
 \usepackage{parskip} %Removes paragraph line indents
 \usepackage{tabu}
 \usepackage{microtype}
@@ -41,11 +42,11 @@
 \section{Implementation}
 	Each implementation step is presented in the same order as the compiler structure: Lexer $\rightarrow$ Parser $\rightarrow$ Type Checker $\rightarrow$ Interpreter $\vee$ MIPS Code Generator
 \subsection{Task 1}
-	Task 1 is the implementation of True/False, multiplication/division, AND/OR and finally Not/Negation. This task was probably the longest to do, because of the many different components, as well as the fact that we had to learn the rhythm of the coding process.
+	Task 1 is the implementation of \texttt{true/false}, multiplication/division, \texttt{AND/OR} and finally \texttt{not/negate}. This task was probably the longest to do, because of the many different components, as well as the fact that we had to learn the rhythm of the coding process.
 	
-\subsubsection{True and False}
+\subsubsection{\texttt{true} and \texttt{false}}
 
-	To begin with, we're given the sub-task to implement the boolean literals True and False. We start out by creating the following test files:
+	To begin with, we're given the sub-task to implement the boolean literals \texttt{true} and \texttt{false}. We start out by creating the following test files:
 	
 \begin{center}	
 	\begin{tabular}{lV{330pt}}
@@ -78,7 +79,7 @@
 	\end{tabular}
 \end{center}
 
-Starting at the top of the compiler structure, the lexer is upgraded with the proper true and false keywords
+Starting at the top of the compiler structure, the lexer is upgraded with the proper \texttt{true} and \texttt{false} keywords
 
 \begin{center}	
 	\begin{tabular}{lV{380pt}}
@@ -95,7 +96,7 @@ Starting at the top of the compiler structure, the lexer is upgraded with the pr
 	\end{tabular}
 \end{center}
 
-Then we implement the True/False token type in our parser as well as add True and False to the expression list.
+Then we implement the \texttt{true/false} token type in our parser as well as add \texttt{true} and \texttt{false} to the expression list.
 
 \begin{center}	
 	\begin{tabular}{lV{330pt}}
@@ -210,7 +211,7 @@ After creating the test files, we swiftly move on to adding multiplication and d
 	\end{tabular}
 \end{center}
 
-In the parser, we add TIMES and DIVIDE to the already created "PLUS MINUS DEQ EQ LTH" token type. They're given a proper precedence order, as well as added to the expression list.
+In the parser, we add \texttt{TIMES} and \texttt{DIVIDE} to the already created "\texttt{PLUS MINUS DEQ EQ LTH}" token type. They're given a proper precedence order, as well as added to the expression list.
 
 \begin{center}	
 	\begin{tabular}{lV{330pt}}
@@ -331,9 +332,9 @@ Finally, cases for multiplication and division are added to the \verb|compileExp
 	\end{tabular}
 \end{center}
 
-\subsubsection{AND and OR}
-For the AND and OR implementations, we add them as short-curc
-Moving on to the implementation of the boolean operators, AND and OR, we again start out with creating test files for each of them.\\
+\subsubsection{\texttt{AND} and \texttt{OR}}
+For the \texttt{AND} and \texttt{OR} implementations, we add them as short-circuit, which means, that if the left hand side expression is evaluated to false, we break out of the function.\\
+We again start out with creating test files for each of them.\\
 
 \begin{center}	
 	\begin{tabular}{lV{330pt}}
@@ -414,7 +415,7 @@ With the test files in place, we can move on to the lexer.
 	\end{tabular}
 \end{center}
 
-In the parser, we add AND and OR to the "TRUE FALSE" token type as well as add them to the expression list.
+In the parser, we add \texttt{AND} and \texttt{OR} to the "\texttt{TRUE FALSE}" token type as well as add them to the expression list.
 
 \begin{center}	
 	\begin{tabular}{lV{330pt}}
@@ -437,7 +438,7 @@ In the parser, we add AND and OR to the "TRUE FALSE" token type as well as add t
 	\end{tabular}
 \end{center}
 
-Moving on to the type checker, we make sure that we can properly check the used types, when using AND and OR.
+Moving on to the type checker, we make sure that we can properly check the used types, when using \texttt{AND} and \texttt{OR}.
 
 \begin{center}	
 	\begin{tabular}{lV{380pt}}
@@ -504,7 +505,7 @@ We go ahead and implement them in our interpreter.
 	\end{tabular}
 \end{center}
 
-Finally we add the AND and OR to the MIPS code generator.
+Finally we add the \texttt{AND} and \texttt{OR} to the MIPS code generator.
 
 \begin{center}	
 	\begin{tabular}{lV{380pt}}
@@ -548,8 +549,8 @@ Finally we add the AND and OR to the MIPS code generator.
 	\end{tabular}
 \end{center}
 
-\subsubsection{Not and Negation}
-Lastly for this task, we will implement Not and Negation. We made test files for Not, but for Negate, these are already given to us. When run, the tests are passed.\\
+\subsubsection{\texttt{not} and \texttt{negate}}
+Lastly for this task, we will implement \texttt{not} and \texttt{negate}. We made test files for \texttt{not}, but for \texttt{negate}, these are already given to us.
 
 \begin{center}	
 	\begin{tabular}{lV{330pt}}
@@ -606,7 +607,7 @@ After creating the test files, we move on to the lexer
 	\end{tabular}
 \end{center}
 
-In the parser, we add Not and Negate to the "TRUE FALSE AND OR" token type. We make them non-associative. And lastly, we add the two expressions to the expression list.
+In the parser, we add \texttt{not} and \texttt{negate} to the "\texttt{TRUE FALSE AND OR}" token type. We make them non-associative. And lastly, we add the two expressions to the expression list.
 
 \begin{center}	
 	\begin{tabular}{lV{330pt}}
@@ -636,7 +637,7 @@ In the parser, we add Not and Negate to the "TRUE FALSE AND OR" token type. We m
 	\end{tabular}
 \end{center}
 
-Moving on to the type checker, we make sure that we can properly check the used types, when using Not and Negate.
+Moving on to the type checker, we make sure that we can properly check the used types, when using \texttt{not} and \texttt{negate}.
 
 \begin{center}	
 	\begin{tabular}{lV{380pt}}
@@ -725,11 +726,11 @@ Finally we add the expressions to the MIPS code generator
 \subsection{Task 2}
 This task consists of the compiler implementation of \verb|iota|, \verb|map| and \verb|reduce|. \verb|iota| was quite straight forward, as the hints in task 2 quides you through the whole thing; step-by-step. So we will skip explaining the implementation of \verb|iota| and go straight to \verb|map| and \verb|reduce|.
 
-\subsubsection{map and reduce}
+\subsubsection{\texttt{map} and \texttt{reduce}}
 Just like in task one, we need to extend the lexer, parser, type checker, interpreter and the code generator to accept the \verb|map| and \verb|reduce| operators.
 	
-Test files for \verb|map| and \verb|reduce| are already given. After their complete implementation, they were run and passed.
-	
+Test files for \verb|map| and \verb|reduce| are already given.
+
 We can now begin with the top of the compiler structure, which is the lexer.
 	
 \begin{center}	
@@ -739,14 +740,14 @@ We can now begin with the top of the compiler structure, which is the lexer.
 		\midrule
 		&
 		\begin{verbatim}
-			| "map" => Parser.MAP pos
+			| "map"    => Parser.MAP pos
+			| "reduce" => Parser.REDUCE pos
 		\end{verbatim}
 		\\
 		\bottomrule \\
 	\end{tabular}
 \end{center}
-
-In the parser, we add MAP to the previously created "IOTA" token type and to the expression list as well.
+When parsing, we have to keep in mind, that \texttt{map} and \texttt{reduce} both take functions as the first argument, we make sure, that we can parse function names, anonymous functions and operators prefixed with "\texttt{op}". We add \texttt{MAP} and \texttt{REDUCE} to the previously created "\texttt{IOTA}" token type and to the expression list as well. And also add the type for unknown types
 
 \begin{center}	
 	\begin{tabular}{lV{330pt}}
@@ -761,15 +762,23 @@ In the parser, we add MAP to the previously created "IOTA" token type and to the
 		\\
 		\command{Parser.grm} &
 		\begin{verbatim}
+			%type <Fasto.UnknownTypes.FunArg> FunArg
+
+		\end{verbatim}
+		\\
+		\command{Parser.grm} &
+		\begin{verbatim}
 			| MAP LPAR FunArg COMMA Exp RPAR
 			      { Map ($3, $5, (), (), $1) }
+			| REDUCE LPAR FunArg COMMA Exp COMMA Exp RPAR
+			      { Reduce ($3, $5, $7, (), $1) }
 		\end{verbatim}
 		\\
 		\bottomrule \\
 	\end{tabular}
 \end{center}
 
-Moving on to the type checker, we make sure that we can properly check the types that the Map function uses, extending the \verb|checkExp| function with the proper cases.
+Moving on to the type checker, we make sure that we can properly check the types that the \verb|map| and \verb|reduce| functions use, extending the \verb|checkExp| function with the proper cases.
 
 \begin{center}	
 	\begin{tabular}{lV{380pt}}
@@ -778,32 +787,50 @@ Moving on to the type checker, we make sure that we can properly check the types
 		\midrule
 		&
 		\begin{verbatim}
-			| In.Map (f, arr_exp, _, _, pos)
-			  => let val (fnew, f_returntp, f_argument) =
-			             checkFunArg(f, vtab, ftab, pos)
-			         val arr_exp_tp = checkExp ftab vtab arr_exp
-			         val arr_eltp = case arr_eltp of
-			                          Array t => t
-			                        | _ => Error ("Map: wrong type of 
-			                                       array exp")
-			         val f_argtp  = case f_argument of
-			                          [tp] => tp
-			                        | _ => Error ("Map Wrong argument 
-			                                       fn type ")
-			         in if arr_eltp = f_argtp
-			            then (Array f_returntp, 
-			                        Out.Map (fnew, arr_exp_tp, f_argument, 
-			                                 f_returntp, pos))
-			            else raise Error ("Map: wrong argument type " ^
-			                              ppType e_type, pos)
-			         end
+			 | In.Map (f, arr_exp, _, _, pos)
+			   => let val (arr_exp_tp, decvar) = checkExp ftab vtab arr_exp
+			          val (fnew, f_returntp, f_argument) = checkFunArg(f, vtab, 
+			                      ftab, pos)
+			          val arr_eltp = case arr_exp_tp of
+			                           Array t => t
+			                         | _ => raise Error
+			                                ("Map: wrong type of array exp" ,pos)
+			          val f_argtp =  case f_argument of
+			                           [tp] => tp
+			                         | _ => raise Error 
+			                                ("Map Wrong argument fn type ", pos)
+			          in if arr_eltp = f_argtp
+			             then (Array f_returntp, Out.Map (fnew, decvar, arr_eltp, 
+			                                              f_returntp, pos))
+			             else raise Error ("Map: wrong argument type ", pos)
+			          end
+			 
+			 | In.Reduce (f, n_exp, arr_exp, _, pos)
+			   => let val (fnew, f_returntp, f_argument) = checkFunArg(f, vtab, 
+			               ftab, pos)
+			          val (e_type, n_exp_dec) = checkExp ftab vtab n_exp
+			          val (arr_exp_tp, decvar) = checkExp ftab vtab arr_exp
+			          val arr_eltp = case arr_exp_tp of
+			                           Array t => t
+			                         | _ => raise Error 
+			                                ("Reduce: wrong type of array exp" ,pos)
+			          val f_argtp =  case f_argument of
+			                           fa::fas => fa(*more*)
+			                         | _ => raise Error 
+			                                ("Reduce: Wrong argument fn type ", pos)
+			          in if e_type = f_argtp andalso arr_eltp = f_argtp
+			             then (f_returntp, Out.Reduce (fnew, n_exp_dec, decvar, 
+			                   f_returntp, pos))
+			             else raise Error ("Reduce: Wrong argument type " ^ 
+			                               ppType e_type, pos)
+			          end
 		\end{verbatim}
 		\\
 		\bottomrule \\
 	\end{tabular}
 \end{center}
 	
-Next stop is the interpreter, where we extend the \verb|evalExp| function to be able to interpret the \verb|map| function.
+Next stop is the interpreter, where we extend the \verb|evalExp| function to be able to interpret the \verb|map| and \verb|reduce| functions.
 	
 \begin{center}	
 	\begin{tabular}{lV{380pt}}
@@ -811,15 +838,24 @@ Next stop is the interpreter, where we extend the \verb|evalExp| function to be 
 		& \verb|Interpreter.sml|\\
 		\midrule
 		&
-		\begin{verbatim}
-			| evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) = 
-			      let val ls = evalExp(arrexp, vtab,ftab)
-			      in
-			          map (fn x => let val (result, tp) =
-			                                evalFunArg(farg, vtab, ftab, 
-			                                pos, x)
-			                       in result end ) 
-			          ls
+		\begin{verbatim}		
+			| evalExp ( Map (farg, arrexp, _, _, pos), vtab, ftab ) =
+			      let val expression = evalExp(arrexp, vtab, ftab)
+			          val rtp = rtpFunArg(farg, ftab, pos)
+			          val f = (fn x => evalFunArg(farg, vtab, ftab, pos, [x]))
+			      in  case expression of
+			          ArrayVal (ls, tpvar) => ArrayVal (map (f) (ls), rtp)
+			        | _ => raise Error ("Argument need to be an ArrayVal", pos)
+			      end
+			
+			| evalExp ( Reduce (farg, ne, arrexp, tp, pos), vtab, ftab ) =
+			      let val expression = evalExp(arrexp, vtab, ftab)
+			          val neut_exp   = evalExp(ne, vtab, ftab)
+			          val rtp = rtpFunArg(farg, ftab, pos)
+			          val f = (fn (x, y) => evalFunArg(farg, vtab, ftab, pos, [x, y]))
+			      in  case expression of
+			          ArrayVal (ls, tpvar) => (foldl (f) (neut_exp) (ls))
+			        | _ => raise Error ("Argument need to be an ArrayVal", pos)
 			      end
 		\end{verbatim}
 		\\
@@ -827,41 +863,11 @@ Next stop is the interpreter, where we extend the \verb|evalExp| function to be 
 	\end{tabular}
 \end{center}
 	
-Finally the \verb|compileExp| function in the MIPS code generator can be extended with the \verb|map| function.
-	
-\begin{center}	
-	\begin{tabular}{lV{380pt}}
-		\toprule
-		& \verb|CodeGen.sml|\\
-		\midrule
-		&
-		\begin{verbatim}
-			  | Map (farg, arg_exp, elem_type, ret_type, pos) => 
-			        let
-			            val res_reg = newName()
-			            val elem_reg = 
-			        in
-			            body
-			        end
-			        
-			        val loop_map0 = case getElemSize elemType of
-			                          One => Mips.LB (res_reg, elem_reg, "0") 
-			                          :: applyfunArg (farg, [res_reg], vtable,
-			                                          res_reg, pos) @ 
-			                          [Mips.Addi(elem_reg, elem_reg, "1")]
-			                        | Four => Mips.LW (res_reg, elem_reg, "0")
-			                          :: applyfunArg (farg, [res_reg], vtable,
-			                                          res_reg, pos) @ 
-			                          [Mips.Addi(elem_reg, elem_reg, "4")]
-		\end{verbatim}
-		\\
-		\bottomrule \\
-	\end{tabular}
-\end{center}
+Finally the \verb|compileExp| function in the MIPS code generator can be extended with the \verb|map| and \verb|reduce| functions. See appendix \ref{app:CodeGenMap} and \ref{app:CodeGenReduce} for these.
 
 \subsection{Task 3}
 
-\subsubsection{Copy/constant Propagation}
+\subsubsection{Copy/Constant Propagation}
 
 In this sub-task, we implement code to the \verb|copyConstPropFoldExp| function, which will replace variables with entries in the symbol table with their respective constants.
 
@@ -1010,6 +1016,132 @@ In this sub-task the implement constant folding for \texttt{\{*, /, \&\&, $|\ |$
 	\end{tabular}
 \end{center}
 
-\section{Conclusion}
+\newpage
+
+\begin{appendices}
+	\renewcommand\thetable{\thesection\arabic{table}}
+	\renewcommand\thefigure{\thesection\arabic{figure}}
+	\section{\underline{map}\ and reduce} \label{app:CodeGenMap}
+	\begin{center}	
+		\begin{tabular}{lV{380pt}}
+			\toprule
+			& \verb|CodeGen.sml|\\
+			\midrule
+			&
+			\begin{verbatim}		
+				| Map (farg, arr_exp, elem_type, ret_type, pos) => 
+				       let val arr_reg = newName "arr_reg"
+				           val len_reg = newName "len_reg"
+				           val res_reg = newName "res_reg"
+				           val i_reg   = newName "i_reg"
+				           val tmp_reg = newName "tmp_reg"
+				
+				           val loop_beg = newName "loop_beg"
+				           val loop_end = newName "loop_end"
+				
+				           val code1 = compileExp arr_exp vtable arr_reg
+				           val code2 = [Mips.LW (len_reg, arr_reg, "0")]
+				
+				           val init_regs = [ Mips.ADDI (arr_reg, arr_reg, "4")
+				                           , Mips.ADDI (res_reg, place, "4") 
+				                           , Mips.MOVE (i_reg, "0") ]
+				
+				           val loop_header = [ Mips.LABEL (loop_beg)
+				                             , Mips.SUB (tmp_reg, i_reg, len_reg)
+				                             , Mips.BGEZ (tmp_reg, loop_end) ]
+				
+				           val loop_map_load = case getElemSize elem_type of
+				                  One => Mips.LB (tmp_reg, arr_reg, "0") ::
+				                         applyFunArg (farg, [tmp_reg], vtable, tmp_reg, pos) @ 
+				                         [Mips.ADDI(arr_reg, arr_reg, "1")]
+				                | Four => Mips.LW (tmp_reg, arr_reg, "0") ::
+				                         applyFunArg (farg, [tmp_reg], vtable, tmp_reg, pos) @ 
+				                         [Mips.ADDI(arr_reg, arr_reg, "4")]
+				
+				           val loop_map_store = case getElemSize ret_type of
+				                                    One  => [ Mips.SB (tmp_reg, res_reg, "0")
+				                                             , Mips.ADDI(res_reg, res_reg, "1")]
+				                                  | Four => [ Mips.SB (tmp_reg, res_reg, "0")
+				                                             , Mips.ADDI(res_reg, res_reg, "4")]
+				
+				           val loop_footer = [ Mips.ADDI (i_reg, i_reg, "1")
+				                             , Mips.J loop_beg
+				                             , Mips.LABEL loop_end ]
+				
+				       in   code1                                        
+				          @ code2                                        
+				          @ dynalloc (len_reg, place, ret_type)          
+				          @ init_regs                                    
+				          @ loop_header                                  
+				          @ loop_map_load                                
+				          @ loop_map_store                               
+				          @ loop_footer                                  
+				       end
+			\end{verbatim}
+			\\
+			\bottomrule \\
+		\end{tabular}
+	\end{center}
+	
+	\section{map and \underline{reduce}} \label{app:CodeGenReduce}
+	\begin{center}	
+		\begin{tabular}{lV{380pt}}
+			\toprule
+			& \verb|CodeGen.sml|\\
+			\midrule
+			&
+			\begin{verbatim}		
+				(* reduce(f, acc, {x1, x2, ...}) = f(..., f(x2, f(x1, acc))) *)
+				| Reduce (binop, ne_exp, arr_exp, tp, pos) => 
+				        let val ne_reg  = newName "ne_reg"
+				            val arr_reg = newName "arr_reg"
+				            val len_reg = newName "len_reg"
+				            val res_reg = newName "res_reg"
+				            val i_reg   = newName "i_reg"
+				            val tmp_reg = newName "tmp_reg"
+				
+				            val loop_beg = newName "loop_beg"
+				            val loop_end = newName "loop_end"
+				
+				            val ne_code = compileExp ne_exp vtable ne_reg
+				            val arr_code = compileExp arr_exp vtable arr_reg
+				            val len_code = [Mips.LW (len_reg, arr_reg, "0")]
+				
+				            val init_regs = [ Mips.ADDI (arr_reg, arr_reg, "4")
+				                            , Mips.MOVE (i_reg, "0")
+				                            , Mips.MOVE (place, ne_reg) ]
+				
+				            val loop_header = [ Mips.LABEL (loop_beg)
+				                              , Mips.SUB (tmp_reg, i_reg, len_reg)
+				                              , Mips.BGEZ (tmp_reg, loop_end) ]
+				
+				            val loop_reduce = case getElemSize tp of
+				                   One => Mips.LB (tmp_reg, arr_reg, "0") ::
+				                          applyFunArg (binop, [place, tmp_reg], vtable, 
+				                                       place, pos) @ 
+				                          [Mips.ADDI(arr_reg, arr_reg, "1")]
+				                 | Four => Mips.LW (tmp_reg, arr_reg, "0") ::
+				                          applyFunArg (binop, [place, tmp_reg], vtable, 
+				                                       place, pos) @ 
+				                          [Mips.ADDI(arr_reg, arr_reg, "4")]
+				
+				            val loop_footer = [ Mips.ADDI (i_reg, i_reg, "1")
+				                              , Mips.J loop_beg
+				                              , Mips.LABEL loop_end ]
+				
+				        in   ne_code
+				           @ arr_code                              
+				           @ len_code
+				           @ init_regs                          
+				           @ loop_header                        
+				           @ loop_reduce                      
+				           @ loop_footer                        
+				        end
+			\end{verbatim}
+			\\
+			\bottomrule \\
+		\end{tabular}
+	\end{center}
+\end{appendices}
 
 \end{document}

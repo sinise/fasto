@@ -9,6 +9,7 @@
 }
 
 \usepackage[titletoc,toc,title]{appendix}
+\usepackage[utf8x]{inputenc}
 \usepackage{parskip} %Removes paragraph line indents
 \usepackage{tabu}
 \usepackage{microtype}
@@ -42,7 +43,7 @@
 \section{Implementation}
 	Each implementation step is presented in the same order as the compiler structure: Lexer $\rightarrow$ Parser $\rightarrow$ Type Checker $\rightarrow$ Interpreter $\vee$ MIPS Code Generator
 \subsection{Task 1}
-	Task 1 is the implementation of \texttt{true/false}, multiplication/division, \texttt{AND/OR} and finally \texttt{not/negate}. This task was probably the longest to do, because of the many different components, as well as the fact that we had to learn the rhythm of the coding process.
+	Task 1 is the implementation of \texttt{true/false}, multiplication/division, \texttt{AND/OR} and finally \texttt{not/negate}. 
 	
 \subsubsection{\texttt{true} and \texttt{false}}
 
@@ -333,7 +334,7 @@ Finally, cases for multiplication and division are added to the \verb|compileExp
 \end{center}
 
 \subsubsection{\texttt{AND} and \texttt{OR}}
-For the \texttt{AND} and \texttt{OR} implementations, we add them as short-circuit, which means, that if the left hand side expression is evaluated to false, we break out of the function.\\
+For the \texttt{AND} and \texttt{OR} implementations, we add them as short-circuit, which means, that if the left hand side of the expression is evaluated to false, we immediately raise an error without evaluating the right hand side.\\
 We again start out with creating test files for each of them.\\
 
 \begin{center}	
@@ -724,7 +725,7 @@ Finally we add the expressions to the MIPS code generator
 \end{center}
 
 \subsection{Task 2}
-This task consists of the compiler implementation of \verb|iota|, \verb|map| and \verb|reduce|. \verb|iota| was quite straight forward, as the hints in task 2 quides you through the whole thing; step-by-step. So we will skip explaining the implementation of \verb|iota| and go straight to \verb|map| and \verb|reduce|.
+This task consists of the compiler implementation of \verb|iota|, \verb|map| and \verb|reduce|. \verb|iota| was quite straight forward, as the hints in task 2 guides you through the whole thing; step-by-step. So we will skip explaining the implementation of \verb|iota| and go straight to \verb|map| and \verb|reduce|.
 
 \subsubsection{\texttt{map} and \texttt{reduce}}
 Just like in task one, we need to extend the lexer, parser, type checker, interpreter and the code generator to accept the \verb|map| and \verb|reduce| operators.
@@ -747,7 +748,8 @@ We can now begin with the top of the compiler structure, which is the lexer.
 		\bottomrule \\
 	\end{tabular}
 \end{center}
-When parsing, we have to keep in mind, that \texttt{map} and \texttt{reduce} both take functions as the first argument, we make sure, that we can parse function names, anonymous functions and operators prefixed with "\texttt{op}". We add \texttt{MAP} and \texttt{REDUCE} to the previously created "\texttt{IOTA}" token type and to the expression list as well. And also add the type for unknown types
+
+When parsing, we have to keep in mind, that \texttt{map} and \texttt{reduce} both take functions as thefirst argument. We make sure that we can parse function names, anonymous functions. We add \texttt{MAP} and \texttt{REDUCE} in the token type definition and to the expression list.
 
 \begin{center}	
 	\begin{tabular}{lV{330pt}}
@@ -869,7 +871,8 @@ Finally the \verb|compileExp| function in the MIPS code generator can be extende
 
 \subsubsection{Copy/Constant Propagation}
 
-In this sub-task, we implement code to the \verb|copyConstPropFoldExp| function, which will replace variables with entries in the symbol table with their respective constants.
+In this sub-task, we add code to the \texttt{copyConstPropFoldExp} function, which will produce optimized expression when this is possible. First part is to take care of optimizing \texttt{let} expressions recursively and the second part is to replace expressions with reduced expression when this is possible.
+E.g. \texttt{a*1} will always return \texttt{a} and hence we replace the expression with \texttt{a}. It's important to note that \texttt{a*0} can not be replaced with \texttt{0} as the expression has side effects.
 
 We have to fill in 5 blanks, but note, that the first two blanks were actually already filled in the given code. For completion, we've included them here.
 
